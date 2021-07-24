@@ -1,0 +1,34 @@
+{
+  "name": "stackonfire",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^1.0.13",
+    "@chakra-ui/react": "^1.6.2",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@prisma/client": "2.23.0",
+    "@svgr/webpack": "^5.5.0",
+    "axios": "^0.21.1",
+    "boring-avatars": "^1.5.8",
+    "framer-motion": "^4",
+    "next": "10.2.2",
+    "next-auth": "^3.23.3",
+    "next-images": "^1.7.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-hot-toast": "^1.0.2",
+    "react-icons": "^4.2.0",
+    "react-query": "^3.16.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.6",
+    "prisma": "2.23.0",
+    "typescript": "^4.2.4"
+  }
+}
