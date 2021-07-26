@@ -7,6 +7,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// Auth related schema
+
 model Account {
   id                 Int       @id @default(autoincrement())
   compoundId         String    @unique @map(name: "compound_id")
@@ -48,6 +50,8 @@ model User {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
+  projects Project[]
+
   @@map(name: "users")
 }
 
@@ -60,4 +64,33 @@ model VerificationRequest {
   updatedAt  DateTime @default(now()) @map(name: "updated_at")
 
   @@map(name: "verification_requests")
+}
+
+// Business logic related schema
+
+model Project {
+  id           String        @id @default(cuid())
+  name         String
+  description  String?
+  userId       String
+  createdAt    DateTime      @default(now()) @map(name: "created_at")
+  updatedAt    DateTime      @updatedAt @map(name: "updated_at")
+  featureFlags FeatureFlag[]
+
+  User                 User? @relation(fields: [userId_ProjectToUser], references: [id])
+  userId_ProjectToUser Int?
+  @@map(name: "projects")
+}
+
+model FeatureFlag {
+  id          String   @id @default(cuid())
+  projectId   String?
+  name        String
+  description String?
+  isActive    Boolean  @default(false)
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map(name: "created_at")
+  updatedAt   DateTime @updatedAt @map(name: "updated_at")
+
+  Project Project? @relation(fields: [projectId], references: [id])
 }
