@@ -10,6 +10,7 @@ import {
 import { FaFire } from "react-icons/fa";
 import Link from "next/link";
 import { FeatureFlag, Project } from "@prisma/client";
+import BoringAvatar from "boring-avatars";
 
 const ProjectCard = ({
   project,
@@ -33,14 +34,24 @@ const ProjectCard = ({
         transition="all 0.2s"
       >
         <Box>
-          <Text
-            as="h3"
-            fontWeight="bold"
-            fontSize="lg"
-            _groupHover={{ color: "red.400" }}
-          >
-            {project.name}
-          </Text>
+          <HStack>
+            <BoringAvatar
+              size={30}
+              name={project.id}
+              variant="bauhaus"
+              square
+              colors={["#B31237", "#F03813", "#FF8826", "#FFB914", "#2C9FA3"]}
+            />
+
+            <Text
+              as="h3"
+              fontWeight="bold"
+              fontSize="lg"
+              _groupHover={{ color: "red.400" }}
+            >
+              {project.name}
+            </Text>
+          </HStack>
           <Text fontSize="sm" mt="1" color={mode("gray.600", "gray.200")}>
             {project.description}
           </Text>
