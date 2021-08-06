@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.project.upsert({
-    where: {},
+    where: { id: "cks04kp0d000008lb9aqw23gg" },
     update: {},
     create: {
       name: "Test project one",
