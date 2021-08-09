@@ -19,7 +19,7 @@ const ProjectCard = ({
 }) => {
   const numberOfActiveFlags = project.featureFlags.length;
   return (
-    <Link as={`/projects/projectid`} href="/projects/[projectid]">
+    <Link as={`/projects/${project.id}`} href="/projects/[projectid]">
       <Flex
         direction="column"
         justifyContent="space-between"
