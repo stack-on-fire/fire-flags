@@ -17,7 +17,10 @@ const ProjectCard = ({
 }: {
   project: Project & { featureFlags: ReadonlyArray<FeatureFlag> };
 }) => {
-  const numberOfActiveFlags = project.featureFlags.length;
+  const numberOfActiveFlags = project.featureFlags.filter(
+    (flag) => !flag.isArchived && flag.isActive
+  ).length;
+
   return (
     <Link as={`/projects/${project.id}`} href="/projects/[projectid]">
       <Flex

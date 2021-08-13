@@ -152,7 +152,13 @@ const Project = () => {
               <HStack spacing={4}>
                 <HStack spacing={0}>
                   <Icon as={AiOutlineFire} w={8} h={8} color="red.400" />
-                  <Box>{project.featureFlags.length}</Box>
+                  <Box>
+                    {
+                      project.featureFlags.filter(
+                        (flag) => !flag.isArchived && flag.isActive
+                      ).length
+                    }
+                  </Box>
                 </HStack>
                 <Button
                   onClick={() => {
