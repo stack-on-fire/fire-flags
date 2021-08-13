@@ -6,7 +6,11 @@ export default async function handle(req, res) {
       id: String(req.query.projectId),
     },
     include: {
-      featureFlags: true,
+      featureFlags: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
     },
   });
 
