@@ -43,6 +43,7 @@ import { ArrowBackIcon, EditIcon, SettingsIcon } from "@chakra-ui/icons";
 import { truncate } from "lodash";
 import { useEffect } from "react";
 import { HiArchive } from "react-icons/hi";
+import Fuse from "fuse.js";
 
 const Project = () => {
   const router = useRouter();
@@ -61,6 +62,7 @@ const Project = () => {
   const [isEditingFlag, setEditingFlag] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
     if (selectedFlag) {
@@ -102,6 +104,16 @@ const Project = () => {
       },
     }
   );
+
+  const options = {
+    includeScore: true,
+    keys: ["name"],
+  };
+  const fuse = new Fuse(project?.featureFlags, options);
+  const result = project?.featureFlags ? fuse.search(searchString) : [];
+  const usedFlags = searchString
+    ? result.map(({ item }) => item)
+    : project?.featureFlags;
 
   return (
     <>
@@ -154,6 +166,13 @@ const Project = () => {
           </HStack>
         )}
         <Divider my={4} />
+        <Box mb={4}>
+          <Input
+            value={searchString}
+            onChange={(e) => setSearchString(e.target.value)}
+            placeholder="Search feature flags"
+          />
+        </Box>
 
         {selectedFlag ? (
           <Box>
@@ -289,7 +308,7 @@ const Project = () => {
           </Box>
         ) : (
           <SimpleGrid gridGap={2} columns={3}>
-            {project?.featureFlags.map((flag) => {
+            {usedFlags?.map((flag) => {
               return (
                 <Flex
                   alignItems="center"

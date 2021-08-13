@@ -18,6 +18,7 @@
     "axios": "^0.21.1",
     "boring-avatars": "^1.5.8",
     "framer-motion": "^4",
+    "fuse.js": "^6.4.6",
     "next": "10.2.2",
     "next-auth": "^3.23.3",
     "next-images": "^1.7.0",

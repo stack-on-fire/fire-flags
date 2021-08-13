@@ -27,11 +27,13 @@ import ProjectCard from "components/project-card";
 import { fetchProjects, useProjects } from "hooks";
 import { QueryClient, useMutation, useQueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
+import { useSession } from "next-auth/client";
 
 const Index = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [projectName, setProjectName] = useState("");
   const queryClient = useQueryClient();
+  const [session] = useSession();
 
   const {
     data: projects,
@@ -54,26 +56,28 @@ const Index = () => {
   return (
     <Box>
       <Navbar />
-      <Box maxW={1200} mx="auto">
-        <Flex
-          align="center"
-          justify={["center", "center", "left"]}
-          borderBottom="1px solid"
-          borderColor="gray.300"
-          height="80px"
-          p={[0, 0, 4]}
-          transition="all 0.3s"
-        >
-          <Button onClick={onOpen} leftIcon={<PlusSquareIcon />}>
-            New Project
-          </Button>
-        </Flex>
-        <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </SimpleGrid>
-      </Box>
+      {session && (
+        <Box maxW={1200} mx="auto">
+          <Flex
+            align="center"
+            justify={["center", "center", "left"]}
+            borderBottom="1px solid"
+            borderColor="gray.300"
+            height="80px"
+            p={[0, 0, 4]}
+            transition="all 0.3s"
+          >
+            <Button onClick={onOpen} leftIcon={<PlusSquareIcon />}>
+              New Project
+            </Button>
+          </Flex>
+          <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </SimpleGrid>
+        </Box>
+      )}
       <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
