@@ -1,3 +1,4 @@
+import { useAppUrl } from "hooks/useAppUrl";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { FeatureFlag } from "@prisma/client";
@@ -12,10 +13,11 @@ type Variables = {
 
 const useFlagMutation = () => {
   const queryClient = useQueryClient();
+  const appUrl = useAppUrl();
   return useMutation(
     async (variables: Variables) => {
       const response = await axios.post(
-        `http://localhost:3000/api/flag/update?id=${variables.id}`,
+        `${appUrl}/api/flag/update?id=${variables.id}`,
         {
           toggleActive: variables.toggleActive,
           toggleArchive: variables.toggleArchive,

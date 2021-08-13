@@ -28,12 +28,14 @@ import { fetchProjects, useProjects } from "hooks";
 import { QueryClient, useMutation, useQueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
 import { useSession } from "next-auth/client";
+import { useAppUrl } from "hooks/useAppUrl";
 
 const Index = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [projectName, setProjectName] = useState("");
   const queryClient = useQueryClient();
   const [session] = useSession();
+  const appUrl = useAppUrl();
 
   const {
     data: projects,
@@ -43,9 +45,7 @@ const Index = () => {
 
   const createProjectMutation = useMutation(
     ({ projectName }: { projectName: string }) =>
-      fetch(
-        `http://localhost:3000/api/project/create?projectName=${projectName}`
-      ),
+      fetch(`${appUrl}/api/project/create?projectName=${projectName}`),
     {
       onSuccess: async () => {
         await queryClient.refetchQueries(["projects"]);

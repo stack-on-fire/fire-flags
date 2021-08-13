@@ -44,11 +44,13 @@ import { truncate } from "lodash";
 import { useEffect } from "react";
 import { HiArchive } from "react-icons/hi";
 import Fuse from "fuse.js";
+import { useAppUrl } from "hooks/useAppUrl";
 
 const Project = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const flagMutation = useFlagMutation();
+  const appUrl = useAppUrl();
 
   const {
     data: project,
@@ -92,7 +94,7 @@ const Project = () => {
   const createFlagMutation = useMutation(
     async () => {
       const result = await fetch(
-        `http://localhost:3000/api/flag/create?projectId=${project.id}`
+        `${appUrl}/api/flag/create?projectId=${project.id}`
       );
       const json = await result.json();
       return json;

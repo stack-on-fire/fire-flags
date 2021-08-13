@@ -1,8 +1,10 @@
-import axios from "axios";
+import { useAppUrl } from "hooks/useAppUrl";
+
 import { useQuery } from "react-query";
 
 const fetchProjects = async () => {
-  const response = await fetch("http://localhost:3000/api/projects");
+  const appUrl = useAppUrl();
+  const response = await fetch(`${appUrl}/api/projects`);
   const json = await response.json();
 
   return json;

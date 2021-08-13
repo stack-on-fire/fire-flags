@@ -9,6 +9,7 @@ import {
   Stack,
   useColorModeValue as mode,
 } from "@chakra-ui/react";
+import { useAppUrl } from "hooks/useAppUrl";
 import { signIn } from "next-auth/client";
 import Link from "next/link";
 import * as React from "react";
@@ -22,13 +23,14 @@ export const LoginForm = ({ variant }: Props) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const appUrl = useAppUrl();
 
   return (
     <form
       onSubmit={(e) => {
         setIsLoading(true);
         e.preventDefault();
-        signIn("email", { email, callbackUrl: "http://localhost:3000" });
+        signIn("email", { email, callbackUrl: appUrl });
       }}
     >
       <Stack spacing="-px">
