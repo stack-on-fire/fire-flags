@@ -166,13 +166,15 @@ const Project = () => {
           </HStack>
         )}
         <Divider my={4} />
-        <Box mb={4}>
-          <Input
-            value={searchString}
-            onChange={(e) => setSearchString(e.target.value)}
-            placeholder="Search feature flags"
-          />
-        </Box>
+        {!selectedFlag && (
+          <Box mb={4}>
+            <Input
+              value={searchString}
+              onChange={(e) => setSearchString(e.target.value)}
+              placeholder="Search feature flags"
+            />
+          </Box>
+        )}
 
         {selectedFlag ? (
           <Box>
@@ -195,15 +197,17 @@ const Project = () => {
               </Button>
               <Heading fontSize="xl">{selectedFlag.name}</Heading>
               {selectedFlag.isArchived && (
-                <Fade in={selectedFlag.isArchived}>
-                  <Icon
-                    position="relative"
-                    left={-2}
-                    top={-0.5}
-                    as={HiArchive}
-                    color="gray.500"
-                  />
-                </Fade>
+                <Tooltip label="This flag is archived">
+                  <Fade in={selectedFlag.isArchived}>
+                    <Icon
+                      position="relative"
+                      left={-2}
+                      top={-0.5}
+                      as={HiArchive}
+                      color="gray.500"
+                    />
+                  </Fade>
+                </Tooltip>
               )}
             </HStack>
             <Tabs variant="enclosed">
@@ -258,24 +262,32 @@ const Project = () => {
                       {selectedFlag.description}
                     </Text>
                   )}
-                  <FormControl display="flex" alignItems="center">
-                    <FormLabel htmlFor="realease toggle" mb="0">
-                      Enable feature flag?
-                    </FormLabel>
-                    <Switch
-                      onChange={() => {
-                        flagMutation.mutate({
-                          id: selectedFlag.id,
-                          toggleActive: true,
-                        });
-                      }}
-                      colorScheme="green"
-                      isChecked={
-                        !selectedFlag.isArchived && selectedFlag.isActive
-                      }
-                      id="release-toggle"
-                    />
-                  </FormControl>
+                  <Divider mb={4} />
+                  <Tooltip
+                    isDisabled={!selectedFlag.isArchived}
+                    label="This flag is archived. Unarchive before enabling it."
+                  >
+                    <FormControl maxW={300} display="flex" alignItems="center">
+                      <FormLabel fontSize="xl" htmlFor="realease toggle" mb="0">
+                        Enable feature flag?
+                      </FormLabel>
+                      <Switch
+                        onChange={() => {
+                          flagMutation.mutate({
+                            id: selectedFlag.id,
+                            toggleActive: true,
+                          });
+                        }}
+                        size="md"
+                        colorScheme="green"
+                        isChecked={
+                          !selectedFlag.isArchived && selectedFlag.isActive
+                        }
+                        isDisabled={selectedFlag.isArchived}
+                        id="release-toggle"
+                      />
+                    </FormControl>
+                  </Tooltip>
                 </TabPanel>
                 <TabPanel>
                   <HStack mb={2}>
