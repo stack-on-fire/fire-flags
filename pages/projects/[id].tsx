@@ -333,7 +333,7 @@ const Project = () => {
                   justifyContent="space-between"
                   p={4}
                   border="1px solid"
-                  borderColor="gray.400"
+                  borderColor={useColorModeValue("gray.200", "gray.700")}
                 >
                   <HStack>
                     <IconButton
