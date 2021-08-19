@@ -5,7 +5,6 @@ import {
   Stack,
   useMediaQuery,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import * as React from "react";
 
 type ExtendedProps = { preserveText?: boolean };

@@ -22,7 +22,7 @@ const ProjectCard = ({
   ).length;
 
   return (
-    <Link as={`/projects/${project.id}`} href="/projects/[projectid]">
+    <Link as={`/projects/${project.id}`} href="/projects/[id]">
       <Flex
         direction="column"
         justifyContent="space-between"

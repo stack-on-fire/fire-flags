@@ -13,8 +13,11 @@ import * as React from "react";
 import { Logo } from "components/logo";
 import { useSession } from "next-auth/client";
 import { AccountSwitcher } from "components/account";
+import { useRouter } from "next/dist/client/router";
 export const Navbar = () => {
   const [session, loading] = useSession();
+  const router = useRouter();
+  console.log(router);
 
   const signInComponent = session ? (
     <HStack>
