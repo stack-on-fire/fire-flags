@@ -17,7 +17,6 @@ import { useRouter } from "next/dist/client/router";
 export const Navbar = () => {
   const [session, loading] = useSession();
   const router = useRouter();
-  console.log(router);
 
   const signInComponent = session ? (
     <HStack>
@@ -32,12 +31,14 @@ export const Navbar = () => {
     <Box as="header" bg={mode("white", "gray.800")} borderBottomWidth="1px">
       <Box maxW="7xl" mx="auto" py="4" px={{ base: "6", md: "8" }}>
         <HStack spacing="8" justifyContent="space-between" alignItems="center">
-          <Link href="/">
-            <Box cursor="pointer">
-              <VisuallyHidden>Stack on fire</VisuallyHidden>
-              <Logo h="6" />
-            </Box>
-          </Link>
+          <Box
+            onClick={() => router.push("/", null, { shallow: true })}
+            cursor="pointer"
+          >
+            <VisuallyHidden>Stack on fire</VisuallyHidden>
+            <Logo h="6" />
+          </Box>
+
           <Skeleton height="20px" />
           {loading ? <Skeleton height="25px" width={200} /> : signInComponent}
         </HStack>
