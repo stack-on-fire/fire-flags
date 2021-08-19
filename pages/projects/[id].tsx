@@ -45,6 +45,7 @@ import { useEffect } from "react";
 import { HiArchive } from "react-icons/hi";
 import Fuse from "fuse.js";
 import { useAppUrl } from "hooks/useAppUrl";
+import Link from "next/link";
 
 const Project = () => {
   const router = useRouter();
@@ -123,16 +124,14 @@ const Project = () => {
       <Box p={4}>
         <Breadcrumb mb={8}>
           <BreadcrumbItem>
-            <BreadcrumbLink onClick={() => router.push("/")} href="/">
-              Projects
-            </BreadcrumbLink>
+            <Link href="/">
+              <BreadcrumbLink>Projects</BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
           <BreadcrumbItem color={selectedFlag ? undefined : "gray.400"}>
-            <BreadcrumbLink
-              onClick={() => router.push(`/projects/${project.id}`)}
-            >
-              {project?.name}
-            </BreadcrumbLink>
+            <Link href={`/projects/[id]`} as={`/projects/${project?.id}`}>
+              <BreadcrumbLink>{project?.name}</BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
           {selectedFlag && (
             <BreadcrumbItem color="gray.500">
