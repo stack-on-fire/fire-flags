@@ -32,6 +32,7 @@ import {
   AlertIcon,
   Fade,
   useColorModeValue,
+  Spinner,
 } from "@chakra-ui/react";
 import { QueryClient, useMutation, useQueryClient } from "react-query";
 import BoringAvatar from "boring-avatars";
@@ -293,6 +294,9 @@ const Project = () => {
                         isDisabled={selectedFlag.isArchived}
                         id="release-toggle"
                       />
+                      {flagMutation.isLoading && (
+                        <Spinner color="gray" ml={1} size="xs" />
+                      )}
                     </FormControl>
                   </Tooltip>
                 </TabPanel>
@@ -312,6 +316,9 @@ const Project = () => {
                       colorScheme="green"
                       size="md"
                     />
+                    {flagMutation.isLoading && (
+                      <Spinner color="gray" ml={1} size="xs" />
+                    )}
                   </HStack>
                   <Alert status="warning">
                     <AlertIcon />
@@ -373,14 +380,19 @@ const Project = () => {
                       color="gray.500"
                     />
                   ) : (
-                    <Switch
-                      onChange={() =>
-                        flagMutation.mutate({ id: flag.id, toggleActive: true })
-                      }
-                      isChecked={!flag.isArchived && flag.isActive}
-                      colorScheme="green"
-                      size="md"
-                    />
+                    <HStack>
+                      <Switch
+                        onChange={() =>
+                          flagMutation.mutate({
+                            id: flag.id,
+                            toggleActive: true,
+                          })
+                        }
+                        isChecked={!flag.isArchived && flag.isActive}
+                        colorScheme="green"
+                        size="md"
+                      />
+                    </HStack>
                   )}
                 </Flex>
               );
