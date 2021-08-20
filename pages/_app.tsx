@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "next-auth/client";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
@@ -19,6 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Toaster />
             </div>
           </Provider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </Hydrate>
       </QueryClientProvider>
     </ChakraProvider>
