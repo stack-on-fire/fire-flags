@@ -2,7 +2,7 @@ import prisma from "lib/prisma";
 
 export default async function handle(req, res) {
   const { id } = req.query;
-  const { toggleArchive } = req.body;
+  const { toggleArchive, name } = req.body;
 
   const currentProject = await prisma.project.findUnique({
     where: { id },
@@ -13,6 +13,7 @@ export default async function handle(req, res) {
       id,
     },
     data: {
+      name,
       isArchived: toggleArchive
         ? !currentProject.isArchived
         : currentProject.isArchived,

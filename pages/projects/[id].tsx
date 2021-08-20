@@ -70,7 +70,9 @@ const Project = () => {
   );
 
   const [isEditingFlag, setEditingFlag] = useState(false);
+  const [isEditingProject, setEditingProject] = useState(false);
   const [name, setName] = useState("");
+  const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
   const [searchString, setSearchString] = useState("");
 
@@ -86,6 +88,9 @@ const Project = () => {
     if (selectedFlag) {
       setName(selectedFlag.name);
       setDescription(selectedFlag.description);
+    }
+    if (project) {
+      setProjectName(project.name);
     }
   }, [router.pathname, selectedFlag]);
 
@@ -224,9 +229,41 @@ const Project = () => {
               </Button>
               <Heading size="md">Project settings</Heading>
             </HStack>
+
+            <HStack mb={2}>
+              {isEditingProject ? (
+                <Input
+                  onChange={(e) => setProjectName(e.target.value)}
+                  value={projectName}
+                  size="sm"
+                />
+              ) : (
+                <Text fontSize="lg">{project?.name}</Text>
+              )}
+              {isEditingProject ? (
+                <Button
+                  onClick={() => {
+                    projectMutation.mutate({
+                      id: project.id,
+                      name: projectName,
+                    });
+                    setEditingProject(false);
+                  }}
+                >
+                  Save
+                </Button>
+              ) : (
+                <IconButton
+                  onClick={() => setEditingProject(!isEditingProject)}
+                  size="sm"
+                  aria-label="Edit"
+                  icon={<EditIcon />}
+                />
+              )}
+            </HStack>
             <Tooltip label="Archive project.">
               <FormControl maxW={300} display="flex" alignItems="center">
-                <FormLabel fontSize="xl" htmlFor="realease toggle" mb="0">
+                <FormLabel fontSize="lg" htmlFor="realease toggle" mb="0">
                   Archive project?
                 </FormLabel>
                 <Switch
@@ -238,7 +275,7 @@ const Project = () => {
                   }
                   size="md"
                   colorScheme="green"
-                  isChecked={project.isArchived}
+                  isChecked={project?.isArchived}
                   id="release-toggle"
                 />
                 {flagMutation.isLoading && (
