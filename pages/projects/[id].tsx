@@ -37,7 +37,7 @@ import {
 import { QueryClient, useMutation, useQueryClient } from "react-query";
 import BoringAvatar from "boring-avatars";
 import { fetchProject, useFlagMutation, useProject } from "hooks";
-import { AiOutlineFire } from "react-icons/ai";
+import { FaFire } from "react-icons/fa";
 import { dehydrate } from "react-query/hydration";
 import { useRouter } from "next/dist/client/router";
 import { ArrowBackIcon, EditIcon, SettingsIcon } from "@chakra-ui/icons";
@@ -153,7 +153,7 @@ const Project = () => {
               <Heading>{project.name}</Heading>
               <HStack spacing={4}>
                 <HStack spacing={0}>
-                  <Icon as={AiOutlineFire} w={8} h={8} color="red.400" />
+                  <Icon as={FaFire} w={8} h={8} color="red.400" />
                   <Box>
                     {
                       project.featureFlags.filter(
@@ -162,13 +162,20 @@ const Project = () => {
                     }
                   </Box>
                 </HStack>
-                <Button
-                  onClick={() => {
-                    createFlagMutation.mutate();
-                  }}
-                >
-                  Add flag
-                </Button>
+                <HStack>
+                  <Button
+                    onClick={() => {
+                      createFlagMutation.mutate();
+                    }}
+                  >
+                    Add flag
+                  </Button>
+                  <IconButton
+                    onClick={() => console.log(123)}
+                    aria-label="Settings"
+                    icon={<SettingsIcon />}
+                  />
+                </HStack>
               </HStack>
             </VStack>
           </HStack>
