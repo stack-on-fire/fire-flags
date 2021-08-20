@@ -99,9 +99,10 @@ const Index = () => {
             </Button>
             <Button
               mr={3}
-              onClick={async () =>
-                await createProjectMutation.mutateAsync({ projectName })
-              }
+              onClick={async () => {
+                await createProjectMutation.mutateAsync({ projectName });
+                onClose();
+              }}
             >
               Create a project
             </Button>
