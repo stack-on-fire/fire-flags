@@ -36,7 +36,12 @@ import {
 } from "@chakra-ui/react";
 import { QueryClient, useMutation, useQueryClient } from "react-query";
 import BoringAvatar from "boring-avatars";
-import { fetchProject, useFlagMutation, useProject } from "hooks";
+import {
+  fetchProject,
+  useFlagMutation,
+  useProject,
+  useProjectMutation,
+} from "hooks";
 import { FaFire } from "react-icons/fa";
 import { dehydrate } from "react-query/hydration";
 import { useRouter } from "next/dist/client/router";
@@ -52,6 +57,7 @@ const Project = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const flagMutation = useFlagMutation();
+  const projectMutation = useProjectMutation();
   const appUrl = useAppUrl();
 
   const {
@@ -150,7 +156,14 @@ const Project = () => {
               colors={["#B31237", "#F03813", "#FF8826", "#FFB914", "#2C9FA3"]}
             />
             <VStack alignItems="start">
-              <Heading>{project.name}</Heading>
+              <HStack>
+                <Heading>{project.name}</Heading>
+                <Tooltip label="This project is archived">
+                  <Fade in={project.isArchived}>
+                    <Icon fontSize="xl" as={HiArchive} color="gray.500" />
+                  </Fade>
+                </Tooltip>
+              </HStack>
               <HStack spacing={4}>
                 <HStack spacing={0}>
                   <Icon as={FaFire} w={8} h={8} color="red.400" />
@@ -171,7 +184,16 @@ const Project = () => {
                     Add flag
                   </Button>
                   <IconButton
-                    onClick={() => console.log(123)}
+                    onClick={() =>
+                      router.push(
+                        {
+                          pathname: router.pathname,
+                          query: { settings: true },
+                        },
+                        `${project.id}?settings=true`,
+                        { shallow: true }
+                      )
+                    }
                     aria-label="Settings"
                     icon={<SettingsIcon />}
                   />
@@ -181,19 +203,9 @@ const Project = () => {
           </HStack>
         )}
         <Divider my={4} />
-        {!selectedFlag && (
-          <Box mb={4}>
-            <Input
-              value={searchString}
-              onChange={(e) => setSearchString(e.target.value)}
-              placeholder="Search feature flags"
-            />
-          </Box>
-        )}
-
-        {selectedFlag ? (
+        {router.query.settings === "true" ? (
           <Box>
-            <HStack spacing={4} mb={4}>
+            <HStack mb={4}>
               <Button
                 onClick={() =>
                   router.push(
@@ -210,201 +222,266 @@ const Project = () => {
               >
                 Back
               </Button>
-              <Heading fontSize="xl">{selectedFlag.name}</Heading>
-              {selectedFlag.isArchived && (
-                <Tooltip label="This flag is archived">
-                  <Fade in={selectedFlag.isArchived}>
-                    <Icon
-                      position="relative"
-                      left={-2}
-                      top={-0.5}
-                      as={HiArchive}
-                      color="gray.500"
-                    />
-                  </Fade>
-                </Tooltip>
-              )}
+              <Heading size="md">Project settings</Heading>
             </HStack>
-            <Tabs variant="enclosed">
-              <TabList mb="1em">
-                <Tab>Main</Tab>
-                {/* <Tab>Strategies</Tab> */}
-                <Tab>Settings</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <HStack mb={2}>
-                    {isEditingFlag ? (
-                      <Input
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
-                        size="sm"
-                      />
-                    ) : (
-                      <Heading fontSize="xl">{selectedFlag.name}</Heading>
-                    )}
-                    {isEditingFlag ? (
-                      <Button
-                        onClick={() => {
-                          flagMutation.mutate({
-                            id: selectedFlag.id,
-                            name,
-                            description,
-                          });
-                          setEditingFlag(false);
-                        }}
-                      >
-                        Save
-                      </Button>
-                    ) : (
-                      <IconButton
-                        onClick={() => setEditingFlag(!isEditingFlag)}
-                        size="sm"
-                        aria-label="Edit"
-                        icon={<EditIcon />}
-                      />
-                    )}
-                  </HStack>
-
-                  {isEditingFlag ? (
-                    <Textarea
-                      onChange={(e) => setDescription(e.target.value)}
-                      size="sm"
-                      value={description}
-                    />
-                  ) : (
-                    <Text mb={4} minW={350}>
-                      {selectedFlag.description}
-                    </Text>
-                  )}
-                  <Divider mb={4} />
-                  <Tooltip
-                    isDisabled={!selectedFlag.isArchived}
-                    label="This flag is archived. Unarchive before enabling it."
-                  >
-                    <FormControl maxW={300} display="flex" alignItems="center">
-                      <FormLabel fontSize="xl" htmlFor="realease toggle" mb="0">
-                        Enable feature flag?
-                      </FormLabel>
-                      <Switch
-                        onChange={() => {
-                          flagMutation.mutate({
-                            id: selectedFlag.id,
-                            toggleActive: true,
-                          });
-                        }}
-                        size="md"
-                        colorScheme="green"
-                        isChecked={
-                          !selectedFlag.isArchived && selectedFlag.isActive
-                        }
-                        isDisabled={selectedFlag.isArchived}
-                        id="release-toggle"
-                      />
-                      {flagMutation.isLoading && (
-                        <Spinner color="gray" ml={1} size="xs" />
-                      )}
-                    </FormControl>
-                  </Tooltip>
-                </TabPanel>
-                <TabPanel>
-                  <HStack mb={2}>
-                    <Heading mb={2} fontSize="lg">
-                      Archive flag
-                    </Heading>
-                    <Switch
-                      onChange={() =>
-                        flagMutation.mutate({
-                          id: selectedFlag.id,
-                          toggleArchive: true,
-                        })
-                      }
-                      isChecked={selectedFlag.isArchived}
-                      colorScheme="green"
-                      size="md"
-                    />
-                    {flagMutation.isLoading && (
-                      <Spinner color="gray" ml={1} size="xs" />
-                    )}
-                  </HStack>
-                  <Alert status="warning">
-                    <AlertIcon />
-                    Archiving the flag will automatically turn it off for all
-                    the projects where it's used.
-                  </Alert>
-                </TabPanel>
-                {/* <TabPanel>
-                  <p>three!</p>
-                </TabPanel> */}
-              </TabPanels>
-            </Tabs>
+            <Tooltip label="Archive project.">
+              <FormControl maxW={300} display="flex" alignItems="center">
+                <FormLabel fontSize="xl" htmlFor="realease toggle" mb="0">
+                  Archive project?
+                </FormLabel>
+                <Switch
+                  onChange={() =>
+                    projectMutation.mutate({
+                      id: project.id,
+                      toggleArchive: true,
+                    })
+                  }
+                  size="md"
+                  colorScheme="green"
+                  isChecked={project.isArchived}
+                  id="release-toggle"
+                />
+                {flagMutation.isLoading && (
+                  <Spinner color="gray" ml={1} size="xs" />
+                )}
+              </FormControl>
+            </Tooltip>
           </Box>
         ) : (
-          <SimpleGrid gridGap={2} columns={3}>
-            {usedFlags?.map((flag) => {
-              return (
-                <Flex
-                  alignItems="center"
-                  justifyContent="space-between"
-                  p={4}
-                  border="1px solid"
-                  borderColor={useColorModeValue("gray.200", "gray.700")}
-                >
-                  <HStack>
-                    <IconButton
-                      onClick={() => setSelectedFlag(flag)}
-                      size="xs"
-                      aria-label="Settings"
-                      icon={<SettingsIcon />}
-                    />
+          <Box>
+            {!selectedFlag && (
+              <Box mb={4}>
+                <Input
+                  value={searchString}
+                  onChange={(e) => setSearchString(e.target.value)}
+                  placeholder="Search feature flags"
+                />
+              </Box>
+            )}
 
-                    <Tooltip
-                      isDisabled={flag.name.length < 25}
-                      placement="top"
-                      hasArrow
-                      label={flag.name}
-                      aria-label="flag name tooltip"
-                    >
-                      <Text
-                        onClick={() => setSelectedFlag(flag)}
-                        px={1}
-                        color={useColorModeValue("gray.600", "gray.300")}
-                        _hover={{
-                          textDecoration: "underline",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {truncate(flag.name, { length: 25 })}
-                      </Text>
+            {selectedFlag ? (
+              <Box>
+                <HStack spacing={4} mb={4}>
+                  <Button
+                    onClick={() =>
+                      router.push(
+                        {
+                          pathname: router.pathname,
+                        },
+                        `${project.id}`,
+                        { shallow: true }
+                      )
+                    }
+                    size="md"
+                    aria-label="Back arrow"
+                    leftIcon={<ArrowBackIcon />}
+                  >
+                    Back
+                  </Button>
+                  <Heading fontSize="xl">{selectedFlag.name}</Heading>
+                  {selectedFlag.isArchived && (
+                    <Tooltip label="This flag is archived">
+                      <Fade in={selectedFlag.isArchived}>
+                        <Icon
+                          position="relative"
+                          left={-2}
+                          top={-0.5}
+                          as={HiArchive}
+                          color="gray.500"
+                        />
+                      </Fade>
                     </Tooltip>
-                  </HStack>
-                  {flag.isArchived ? (
-                    <Icon
-                      position="relative"
-                      left={-2}
-                      top={-0.5}
-                      as={HiArchive}
-                      color="gray.500"
-                    />
-                  ) : (
-                    <HStack>
-                      <Switch
-                        onChange={() =>
-                          flagMutation.mutate({
-                            id: flag.id,
-                            toggleActive: true,
-                          })
-                        }
-                        isChecked={!flag.isArchived && flag.isActive}
-                        colorScheme="green"
-                        size="md"
-                      />
-                    </HStack>
                   )}
-                </Flex>
-              );
-            })}
-          </SimpleGrid>
+                </HStack>
+                <Tabs variant="enclosed">
+                  <TabList mb="1em">
+                    <Tab>Main</Tab>
+                    {/* <Tab>Strategies</Tab> */}
+                    <Tab>Settings</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel>
+                      <HStack mb={2}>
+                        {isEditingFlag ? (
+                          <Input
+                            onChange={(e) => setName(e.target.value)}
+                            value={name}
+                            size="sm"
+                          />
+                        ) : (
+                          <Heading fontSize="xl">{selectedFlag.name}</Heading>
+                        )}
+                        {isEditingFlag ? (
+                          <Button
+                            onClick={() => {
+                              flagMutation.mutate({
+                                id: selectedFlag.id,
+                                name,
+                                description,
+                              });
+                              setEditingFlag(false);
+                            }}
+                          >
+                            Save
+                          </Button>
+                        ) : (
+                          <IconButton
+                            onClick={() => setEditingFlag(!isEditingFlag)}
+                            size="sm"
+                            aria-label="Edit"
+                            icon={<EditIcon />}
+                          />
+                        )}
+                      </HStack>
+                      {isEditingFlag ? (
+                        <Textarea
+                          onChange={(e) => setDescription(e.target.value)}
+                          size="sm"
+                          value={description}
+                        />
+                      ) : (
+                        <Text mb={4} minW={350}>
+                          {selectedFlag.description}
+                        </Text>
+                      )}
+                      <Divider mb={4} />
+                      <Tooltip
+                        isDisabled={!selectedFlag.isArchived}
+                        label="This flag is archived. Unarchive before enabling it."
+                      >
+                        <FormControl
+                          maxW={300}
+                          display="flex"
+                          alignItems="center"
+                        >
+                          <FormLabel
+                            fontSize="xl"
+                            htmlFor="realease toggle"
+                            mb="0"
+                          >
+                            Enable feature flag?
+                          </FormLabel>
+                          <Switch
+                            onChange={() => {
+                              flagMutation.mutate({
+                                id: selectedFlag.id,
+                                toggleActive: true,
+                              });
+                            }}
+                            size="md"
+                            colorScheme="green"
+                            isChecked={
+                              !selectedFlag.isArchived && selectedFlag.isActive
+                            }
+                            isDisabled={selectedFlag.isArchived}
+                            id="release-toggle"
+                          />
+                          {flagMutation.isLoading && (
+                            <Spinner color="gray" ml={1} size="xs" />
+                          )}
+                        </FormControl>
+                      </Tooltip>
+                    </TabPanel>
+                    <TabPanel>
+                      <HStack mb={2}>
+                        <Heading mb={2} fontSize="lg">
+                          Archive flag
+                        </Heading>
+                        <Switch
+                          onChange={() =>
+                            flagMutation.mutate({
+                              id: selectedFlag.id,
+                              toggleArchive: true,
+                            })
+                          }
+                          isChecked={selectedFlag.isArchived}
+                          colorScheme="green"
+                          size="md"
+                        />
+                        {flagMutation.isLoading && (
+                          <Spinner color="gray" ml={1} size="xs" />
+                        )}
+                      </HStack>
+                      <Alert status="warning">
+                        <AlertIcon />
+                        Archiving the flag will automatically turn it off for
+                        all the projects where it's used.
+                      </Alert>
+                    </TabPanel>
+                    {/* <TabPanel>
+                  <p>three!</p>
+                </TabPanel> */}
+                  </TabPanels>
+                </Tabs>
+              </Box>
+            ) : (
+              <SimpleGrid gridGap={2} columns={3}>
+                {usedFlags?.map((flag) => {
+                  return (
+                    <Flex
+                      alignItems="center"
+                      justifyContent="space-between"
+                      p={4}
+                      border="1px solid"
+                      borderColor={useColorModeValue("gray.200", "gray.700")}
+                    >
+                      <HStack>
+                        <IconButton
+                          onClick={() => setSelectedFlag(flag)}
+                          size="xs"
+                          aria-label="Settings"
+                          icon={<SettingsIcon />}
+                        />
+
+                        <Tooltip
+                          isDisabled={flag.name.length < 25}
+                          placement="top"
+                          hasArrow
+                          label={flag.name}
+                          aria-label="flag name tooltip"
+                        >
+                          <Text
+                            onClick={() => setSelectedFlag(flag)}
+                            px={1}
+                            color={useColorModeValue("gray.600", "gray.300")}
+                            _hover={{
+                              textDecoration: "underline",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {truncate(flag.name, { length: 25 })}
+                          </Text>
+                        </Tooltip>
+                      </HStack>
+                      {flag.isArchived ? (
+                        <Icon
+                          position="relative"
+                          left={-2}
+                          top={-0.5}
+                          as={HiArchive}
+                          color="gray.500"
+                        />
+                      ) : (
+                        <HStack>
+                          <Switch
+                            onChange={() =>
+                              flagMutation.mutate({
+                                id: flag.id,
+                                toggleActive: true,
+                              })
+                            }
+                            isChecked={!flag.isArchived && flag.isActive}
+                            colorScheme="green"
+                            size="md"
+                          />
+                        </HStack>
+                      )}
+                    </Flex>
+                  );
+                })}
+              </SimpleGrid>
+            )}
+          </Box>
         )}
       </Box>
     </>

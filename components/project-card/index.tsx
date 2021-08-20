@@ -11,6 +11,7 @@ import { FaFire } from "react-icons/fa";
 import Link from "next/link";
 import { FeatureFlag, Project } from "@prisma/client";
 import BoringAvatar from "boring-avatars";
+import { HiArchive } from "react-icons/hi";
 
 const ProjectCard = ({
   project,
@@ -60,6 +61,9 @@ const ProjectCard = ({
           </Text>
         </Box>
         <HStack>
+          {project.isArchived && (
+            <Icon fontSize="xl" as={HiArchive} color="gray.500" />
+          )}
           <Icon as={FaFire} fontSize="xl" color="red.400" />
           <Text
             fontSize="sm"

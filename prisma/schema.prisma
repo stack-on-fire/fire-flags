@@ -75,6 +75,7 @@ model Project {
   userId       String
   createdAt    DateTime      @default(now()) @map(name: "created_at")
   updatedAt    DateTime      @updatedAt @map(name: "updated_at")
+  isArchived   Boolean       @default(false)
   featureFlags FeatureFlag[]
 
   User                 User? @relation(fields: [userId_ProjectToUser], references: [id])
