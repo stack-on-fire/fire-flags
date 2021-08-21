@@ -24,9 +24,9 @@ import {
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import ProjectCard from "components/project-card";
 
-import { fetchProjects, useProjects } from "hooks";
-import { QueryClient, useMutation, useQueryClient } from "react-query";
-import { dehydrate } from "react-query/hydration";
+import { useProjects } from "hooks";
+import { useMutation, useQueryClient } from "react-query";
+
 import { useAppUrl } from "hooks/useAppUrl";
 
 const Index = () => {

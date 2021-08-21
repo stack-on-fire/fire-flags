@@ -2,8 +2,7 @@ import { useAppUrl } from "hooks/useAppUrl";
 
 import { useQuery } from "react-query";
 
-const fetchProjects = async () => {
-  const appUrl = useAppUrl();
+const fetchProjects = async (appUrl) => {
   const response = await fetch(`${appUrl}/api/projects`);
   const json = await response.json();
 
@@ -11,7 +10,8 @@ const fetchProjects = async () => {
 };
 
 const useProjects = () => {
-  return useQuery(["projects"], fetchProjects);
+  const appUrl = useAppUrl();
+  return useQuery(["projects"], () => fetchProjects(appUrl));
 };
 
 export { useProjects, fetchProjects };

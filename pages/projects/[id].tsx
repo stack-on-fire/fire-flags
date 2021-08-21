@@ -81,7 +81,7 @@ const Project = () => {
       setName(selectedFlag.name);
       setDescription(selectedFlag.description);
     }
-  }, [project]);
+  }, [project, selectedFlag]);
 
   useEffect(() => {
     setEditingFlag(false);
@@ -92,7 +92,7 @@ const Project = () => {
     if (project) {
       setProjectName(project.name);
     }
-  }, [router.pathname, selectedFlag]);
+  }, [router.pathname, selectedFlag, project]);
 
   const setSelectedFlag = (flag: FeatureFlag) =>
     router.push(
@@ -130,18 +130,25 @@ const Project = () => {
     ? result.map(({ item }) => item)
     : project?.featureFlags;
 
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+  const textColor = useColorModeValue("gray.600", "gray.300");
+
   return (
     <>
       <Navbar />
       <Box p={4}>
         <Breadcrumb mb={8}>
           <BreadcrumbItem>
-            <Link href="/">
+            <Link href="/" passHref>
               <BreadcrumbLink>Projects</BreadcrumbLink>
             </Link>
           </BreadcrumbItem>
           <BreadcrumbItem color={selectedFlag ? undefined : "gray.400"}>
-            <Link href={`/projects/[id]`} as={`/projects/${project?.id}`}>
+            <Link
+              href={`/projects/[id]`}
+              as={`/projects/${project?.id}`}
+              passHref
+            >
               <BreadcrumbLink>{project?.name}</BreadcrumbLink>
             </Link>
           </BreadcrumbItem>
@@ -442,7 +449,7 @@ const Project = () => {
                       <Alert status="warning">
                         <AlertIcon />
                         Archiving the flag will automatically turn it off for
-                        all the projects where it's used.
+                        all the projects where it is used.
                       </Alert>
                     </TabPanel>
                     {/* <TabPanel>
@@ -456,11 +463,12 @@ const Project = () => {
                 {usedFlags?.map((flag) => {
                   return (
                     <Flex
+                      key={flag.id}
                       alignItems="center"
                       justifyContent="space-between"
                       p={4}
                       border="1px solid"
-                      borderColor={useColorModeValue("gray.200", "gray.700")}
+                      borderColor={borderColor}
                     >
                       <HStack>
                         <IconButton
@@ -480,7 +488,7 @@ const Project = () => {
                           <Text
                             onClick={() => setSelectedFlag(flag)}
                             px={1}
-                            color={useColorModeValue("gray.600", "gray.300")}
+                            color={textColor}
                             _hover={{
                               textDecoration: "underline",
                               cursor: "pointer",
