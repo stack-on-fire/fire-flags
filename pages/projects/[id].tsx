@@ -54,6 +54,8 @@ import { HiArchive } from "react-icons/hi";
 import Fuse from "fuse.js";
 import { useAppUrl } from "hooks/useAppUrl";
 import Link from "next/link";
+import { useFlags } from "context/flags-context";
+import FireFeature from "components/fire-feature";
 
 const Project = () => {
   const router = useRouter();
@@ -137,6 +139,7 @@ const Project = () => {
 
   const accessUrl = `${appUrl}/api/flags/${project?.id}`;
   const { hasCopied, onCopy } = useClipboard(accessUrl);
+  const flags = useFlags();
 
   return (
     <>
@@ -219,10 +222,14 @@ const Project = () => {
             </VStack>
           </HStack>
         )}
-        <Code mt={4}>{accessUrl}</Code>
-        <Button size="xs" onClick={onCopy} ml={2}>
-          {hasCopied ? "Copied" : "Copy"}
-        </Button>
+        <FireFeature flagName="project link">
+          <Box>
+            <Code mt={4}>{accessUrl}</Code>
+            <Button size="xs" onClick={onCopy} ml={2}>
+              {hasCopied ? "Copied" : "Copy"}
+            </Button>
+          </Box>
+        </FireFeature>
         <Divider my={4} />
         {router.query.settings === "true" ? (
           <Box>

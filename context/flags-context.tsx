@@ -1,3 +1,4 @@
+import { FeatureFlag } from "@prisma/client";
 import { useAppUrl } from "hooks/useAppUrl";
 import * as React from "react";
 import { useState } from "react";
@@ -9,19 +10,19 @@ function FlagsProvider({ children, projectId }) {
   if (projectId === undefined) {
     throw new Error("FlagsProvider expects project id");
   }
-  const [data, setData] = useState({ blah: 123 });
-  const appUrl = useAppUrl();
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    fetch(`${appUrl}/api/flags/${projectId}`)
+    fetch(`https://flags.stackonfire.dev/api/flags/${projectId}`)
       .then((res) => res.json())
       .then((data) => setData(data));
-  }, [appUrl, projectId]);
+  }, [projectId]);
 
   return <FlagsContext.Provider value={data}>{children}</FlagsContext.Provider>;
 }
 
 function useFlags() {
-  const context = React.useContext(FlagsContext);
+  const context = React.useContext(FlagsContext) as ReadonlyArray<FeatureFlag>;
   if (context === undefined) {
     throw new Error("useFlags must be used within a FlagsProvider");
   }
