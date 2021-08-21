@@ -35,6 +35,7 @@ import {
   useColorModeValue,
   Spinner,
   useClipboard,
+  Skeleton,
 } from "@chakra-ui/react";
 import { QueryClient, useMutation, useQueryClient } from "react-query";
 import BoringAvatar from "boring-avatars";
@@ -166,7 +167,7 @@ const Project = () => {
             </BreadcrumbItem>
           )}
         </Breadcrumb>
-        {project && (
+        {project ? (
           <HStack spacing={3} alignItems="start">
             <BoringAvatar
               size={100}
@@ -219,6 +220,14 @@ const Project = () => {
                   />
                 </HStack>
               </HStack>
+            </VStack>
+          </HStack>
+        ) : (
+          <HStack alignItems="center">
+            <Skeleton height={100} width={100} />
+            <VStack>
+              <Skeleton height={8} width={300} />
+              <Skeleton height={8} width={300} />
             </VStack>
           </HStack>
         )}
