@@ -6,6 +6,7 @@ import { Hydrate } from "react-query/hydration";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "next-auth/client";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { FlagsProvider } from "context/flags-context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
@@ -13,15 +14,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
       <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <Provider session={pageProps.session}>
-            <Component {...pageProps} />
-            <div>
-              <Toaster />
-            </div>
-          </Provider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Hydrate>
+        <FlagsProvider projectId="cksm0s3kg000412l2licbbh8s">
+          <Hydrate state={pageProps.dehydratedState}>
+            <Provider session={pageProps.session}>
+              <Component {...pageProps} />
+              <div>
+                <Toaster />
+              </div>
+            </Provider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Hydrate>
+        </FlagsProvider>
       </QueryClientProvider>
     </ChakraProvider>
   );
