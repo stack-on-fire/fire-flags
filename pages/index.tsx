@@ -28,8 +28,12 @@ import { useProjects } from "hooks";
 import { useMutation, useQueryClient } from "react-query";
 
 import { useAppUrl } from "hooks/useAppUrl";
+import { useSession } from "next-auth/client";
+import { useRouter } from "next/dist/client/router";
 
 const Index = () => {
+  const [session] = useSession();
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [projectName, setProjectName] = useState("");
   const queryClient = useQueryClient();
@@ -60,12 +64,21 @@ const Index = () => {
           align="center"
           justify={["center", "center", "left"]}
           borderBottom="1px solid"
-          borderColor="gray.300"
+          borderColor="gray.600"
           height="80px"
           p={[0, 0, 4]}
           transition="all 0.3s"
         >
-          <Button onClick={onOpen} leftIcon={<PlusSquareIcon />}>
+          <Button
+            onClick={() => {
+              if (session) {
+                onOpen();
+              } else {
+                router.push("/signin", null, { shallow: true });
+              }
+            }}
+            leftIcon={<PlusSquareIcon />}
+          >
             New Project
           </Button>
         </Flex>
