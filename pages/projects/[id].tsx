@@ -27,12 +27,14 @@ import {
   FormLabel,
   Tooltip,
   Input,
+  Code,
   Textarea,
   Alert,
   AlertIcon,
   Fade,
   useColorModeValue,
   Spinner,
+  useClipboard,
 } from "@chakra-ui/react";
 import { QueryClient, useMutation, useQueryClient } from "react-query";
 import BoringAvatar from "boring-avatars";
@@ -133,6 +135,9 @@ const Project = () => {
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const textColor = useColorModeValue("gray.600", "gray.300");
 
+  const accessUrl = `${appUrl}/api/flags/${project?.id}`;
+  const { hasCopied, onCopy } = useClipboard(accessUrl);
+
   return (
     <>
       <Navbar />
@@ -214,6 +219,10 @@ const Project = () => {
             </VStack>
           </HStack>
         )}
+        <Code mt={4}>{accessUrl}</Code>
+        <Button size="xs" onClick={onCopy} ml={2}>
+          {hasCopied ? "Copied" : "Copy"}
+        </Button>
         <Divider my={4} />
         {router.query.settings === "true" ? (
           <Box>
