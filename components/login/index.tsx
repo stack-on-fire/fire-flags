@@ -14,7 +14,7 @@ import {
 import { Logo } from "components/logo";
 import { LoginForm } from "./login-form";
 import { DividerWithText } from "./divider-with-text";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaTwitter } from "react-icons/fa";
 import { signIn } from "next-auth/client";
 
 type Props = {
@@ -64,17 +64,25 @@ export const Login = ({ variant }: Props) => {
           <Button
             className="gh-sign-in"
             onClick={() =>
-              signIn("github", { callbackUrl: "https://dev.stackonfire.dev" })
+              signIn("github", { callbackUrl: "https://flags.stackonfire.dev" })
             }
             variant="outline"
           >
             <VisuallyHidden> Github</VisuallyHidden>
             <FaGithub />
           </Button>
-          {/* <Button color="currentColor" variant="outline">
+          <Button
+            onClick={() =>
+              signIn("twitter", {
+                callbackUrl: "https://flags.stackonfire.dev",
+              })
+            }
+            color="currentColor"
+            variant="outline"
+          >
             <VisuallyHidden> Twitter</VisuallyHidden>
             <FaTwitter />
-          </Button> */}
+          </Button>
         </SimpleGrid>
       </Box>
     </>
