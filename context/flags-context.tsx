@@ -1,5 +1,4 @@
 import { FeatureFlag } from "@prisma/client";
-import { useAppUrl } from "hooks/useAppUrl";
 import * as React from "react";
 import { useState } from "react";
 import { useEffect } from "react";

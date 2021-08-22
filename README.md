@@ -1,34 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### Get started with managed version
 
-## Getting Started
+- Visit [flags.stackonfire.dev](https://flags.stackonfire.dev) and sign in with any convenient method.
+- Create a new project
+- Create a new flag, rename it and add description if needed
+- Copy the link from the project page and make a request to that url to retrieve your feature flags
 
-First, run the development server:
+Here is a simple implementation of how you might user the feature.
 
-```bash
-npm run dev
-# or
-yarn dev
+## React example
+
+Implement the context that fetches the flags from url by project id that we pass
+
+```javascript
+import * as React from "react";
+import { useState, useEffect } from "react";
+
+const FlagsContext = React.createContext([]);
+
+function FlagsProvider({ children, projectId }) {
+  if (projectId === undefined) {
+    throw new Error("FlagsProvider expects project id");
+  }
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch(`https://flags.stackonfire.dev/api/flags/${projectId}`)
+      .then((res) => res.json())
+      .then((data) => setData(data));
+  }, [projectId]);
+
+  return <FlagsContext.Provider value={data}>{children}</FlagsContext.Provider>;
+}
+
+function useFlags() {
+  const context = React.useContext(FlagsContext);
+  if (context === undefined) {
+    throw new Error("useFlags must be used within a FlagsProvider");
+  }
+  return context;
+}
+
+export { FlagsProvider, useFlags };
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Somewhere on the top level of the your app you need to provide the id of the project which is present in the link you've copied:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```javascript
+ <FlagsProvider projectId="xxxxxxxxxxxxxxx">
+     <App/>
+  </FlagsProvider>
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+In your app component:
 
-## Learn More
+```javascript
+import { useFlags } from "context/flags-context";
 
-To learn more about Next.js, take a look at the following resources:
+const Component = () => {
+  const flags = useFlags();
+  const foundFlag = flags.find((flag) => flag.name === "test-flag-1");
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+  return <div>{foundFlag.isActive ? <p>Hello there</p> : null}</div>;
+};
+```
