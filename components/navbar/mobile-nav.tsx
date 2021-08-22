@@ -16,11 +16,9 @@ import * as React from "react";
 import FocusLock from "react-focus-lock";
 import {
   HiBookOpen,
-  HiCloudDownload,
   HiCurrencyDollar,
   HiOutlineMenu,
   HiOutlineX,
-  HiQuestionMarkCircle,
 } from "react-icons/hi";
 import { RemoveScroll } from "react-remove-scroll";
 import { NavLink } from "./nav-link";

@@ -4,7 +4,7 @@ import { Stack } from "@chakra-ui/layout";
 import { Switch } from "@chakra-ui/switch";
 import { useColorMode } from "@chakra-ui/color-mode";
 
-const ColorModeSwitcher = () => {
+export const ColorModeSwitcher = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (

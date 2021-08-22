@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  FlexProps,
-  HStack,
-  Img,
-  useMenuButton,
-} from "@chakra-ui/react";
+import { Box, Flex, FlexProps, HStack, useMenuButton } from "@chakra-ui/react";
 import * as React from "react";
 import Avatar from "boring-avatars";
 import { HiSelector } from "react-icons/hi";

@@ -21,7 +21,6 @@ type Props = {
 
 export const LoginForm = ({ variant }: Props) => {
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const appUrl = useAppUrl();
 

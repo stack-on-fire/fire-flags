@@ -6,13 +6,12 @@ import {
   Heading,
   SimpleGrid,
   Stack,
-  Text,
   useColorModeValue,
   VisuallyHidden,
 } from "@chakra-ui/react";
 
-import { Logo } from "components/logo";
 import { LoginForm } from "./login-form";
+import { Logo } from "components/logo";
 import { DividerWithText } from "./divider-with-text";
 import { FaGithub, FaTwitter } from "react-icons/fa";
 import { signIn } from "next-auth/client";

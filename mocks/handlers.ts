@@ -10,8 +10,6 @@ const sessionMock = {
   },
 };
 
-const purchasesMock = { purchasesByUser: [] };
-
 export const handlers = [
   rest.get("/api/auth/session", (req, res, ctx) => {
     return res(ctx.json(sessionMock));
