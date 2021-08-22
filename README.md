@@ -2,7 +2,7 @@
 
 Dead simple and blazing fast feature-flags platform. Get started in minutes. Be confident when releasing new features for your application - you are one kill switch away from disabling the feature if it breaks. Just turn it off now and fix it later 👌
 
-![App example](img/app-demo.jpg?raw=true "App example")
+![App example](img/app-demo.png?raw=true "App example")
 
 ## Get started with managed version
 
