@@ -1,3 +1,7 @@
+# Fire flags 🔥
+
+Dead simple and blazing fast feature-flags platform. Get started in minutes. Be confident when releasing new features for your application - you are one kill switch away from disabling the feature if it breaks. Just turn it off now and fix it later 👌
+
 ## Get started with managed version
 
 - Visit [flags.stackonfire.dev](https://flags.stackonfire.dev) and sign in with any convenient method.
@@ -73,3 +77,10 @@ Fire flags is dead simple to self host! You need to have an instance of Postgres
 Fire-flags currently offers three methods of authentication - magic link, github and twitter. The auth setup is powered by Next-auth and to make it work you need to provide correct environment variables to the project.
 
 > Contributions for dockerised version are highly welcome
+
+## Contribute
+
+- Clone the repo
+- run `docker-compose up -d` in the terminal to boot up the database
+- provide any of the three credentials for auth management 
+- run `yarn run dev` 
