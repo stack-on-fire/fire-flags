@@ -145,7 +145,7 @@ const Project = () => {
   return (
     <>
       <Navbar />
-      <Box p={4}>
+      <Box p={4} maxW={1200} mx="auto">
         <Breadcrumb mb={8}>
           <BreadcrumbItem>
             <Link href="/" passHref>
@@ -484,7 +484,7 @@ const Project = () => {
                 </Tabs>
               </Box>
             ) : (
-              <SimpleGrid gridGap={2} columns={3}>
+              <SimpleGrid gridGap={2} columns={[1, 2, 3]}>
                 {usedFlags?.map((flag) => {
                   return (
                     <Flex
