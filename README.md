@@ -1,4 +1,4 @@
-### Get started with managed version
+## Get started with managed version
 
 - Visit [flags.stackonfire.dev](https://flags.stackonfire.dev) and sign in with any convenient method.
 - Create a new project
@@ -7,7 +7,7 @@
 
 Here is a simple implementation of how you might user the feature.
 
-## React example
+### React example
 
 Implement the context that fetches the flags from url by project id that we pass
 
@@ -65,3 +65,11 @@ const Component = () => {
   return <div>{foundFlag.isActive ? <p>Hello there</p> : null}</div>;
 };
 ```
+
+## Get started with self-hosted version
+
+Fire flags is dead simple to self host! You need to have an instance of Postgres database running, as long as you have the connection string you can safely deploy to Vercel. Environments variables necessary to run the app are listed in `.example.env`
+
+Fire-flags currently offers three methods of authentication - magic link, github and twitter. The auth setup is powered by Next-auth and to make it work you need to provide correct environment variables to the project.
+
+> Contributions for dockerised version are highly welcome
