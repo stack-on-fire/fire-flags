@@ -19,7 +19,7 @@ Implement the context that fetches the flags from url by project id that we pass
 
 ```javascript
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 const FlagsContext = React.createContext([]);
 
@@ -39,7 +39,7 @@ function FlagsProvider({ children, projectId }) {
 }
 
 function useFlags() {
-  const context = React.useContext(FlagsContext);
+  const context = useContext(FlagsContext);
   if (context === undefined) {
     throw new Error("useFlags must be used within a FlagsProvider");
   }
