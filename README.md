@@ -84,5 +84,5 @@ Fire-flags currently offers three methods of authentication - magic link, github
 
 - Clone the repo
 - run `docker-compose up -d` in the terminal to boot up the database
-- provide any of the three credentials for auth management 
+- development environment uses MSW to mock session, so you don't need to set up next-auth related env variables to be able to log in. If you need to mimic login workflow - disable service workers in `_app.tsx` 
 - run `yarn run dev` 

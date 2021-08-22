@@ -23,6 +23,7 @@
     "framer-motion": "^4",
     "fuse.js": "^6.4.6",
     "lodash": "^4.17.21",
+    "msw": "^0.35.0",
     "next": "^11.1.0",
     "next-auth": "^3.23.3",
     "next-images": "^1.7.0",
@@ -41,5 +42,8 @@
     "prisma": "2.23.0",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

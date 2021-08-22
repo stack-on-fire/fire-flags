@@ -8,6 +8,10 @@ import { Provider } from "next-auth/client";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { FlagsProvider } from "context/flags-context";
 
+if (process.env.NODE_ENV === "development") {
+  require("mocks");
+}
+
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
 
