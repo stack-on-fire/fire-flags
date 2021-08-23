@@ -34,9 +34,9 @@ export const ToggleButtonGroup = <T extends string>(
             ...(!isFirstItem && !isLastItem ? { borderRadius: 0 } : {}),
             ...(!isLastItem ? { mr: "-px" } : {}),
           });
+
           return React.cloneElement(button, {
             ...styleProps,
-            // @ts-expect-error: chakra ui fix to the problem
             radioProps: getRadioProps({
               value: button.props.value,
               disabled: props.isDisabled || button.props.isDisabled,
