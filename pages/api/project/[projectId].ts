@@ -7,6 +7,13 @@ export default async function handle(req, res) {
     },
     include: {
       featureFlags: {
+        include: {
+          heats: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+        },
         orderBy: {
           createdAt: "asc",
         },

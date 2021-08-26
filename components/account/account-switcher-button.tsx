@@ -2,8 +2,9 @@ import { Box, Flex, FlexProps, HStack, useMenuButton } from "@chakra-ui/react";
 import * as React from "react";
 import Avatar from "boring-avatars";
 import { HiSelector } from "react-icons/hi";
+import { User } from "@prisma/client";
 
-export const AccountSwitcherButton = (props: FlexProps & any) => {
+export const AccountSwitcherButton = (props: FlexProps & { user: User }) => {
   const buttonProps = useMenuButton(props);
 
   return (

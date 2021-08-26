@@ -1,12 +1,12 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import { ColorModeScript } from "@chakra-ui/react";
+import { ColorModeScript, ThemeConfig } from "@chakra-ui/react";
 
 import { extendTheme } from "@chakra-ui/react";
 const config = {
   initialColorMode: "dark",
   useSystemColorMode: false,
 };
-const theme = extendTheme({ config } as any);
+const theme = extendTheme({ config } as ThemeConfig);
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {

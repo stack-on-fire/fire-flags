@@ -1,8 +1,8 @@
-import { useAppUrl } from "hooks/useAppUrl";
+import { getAppUrl } from "hooks/useAppUrl";
 import { useQuery } from "react-query";
 
 const fetchProject = async (id) => {
-  const appUrl = useAppUrl();
+  const appUrl = getAppUrl();
   const response = await fetch(`${appUrl}/api/project/${id}`);
   const json = await response.json();
 
