@@ -19,64 +19,9 @@ Dead simple and blazing fast feature-flags platform. Get started in minutes. Be 
 
 Here is a simple implementation of how you might user the feature.
 
-### React example
+### Use with React
 
-Implement the context that fetches the flags from url by project id that we pass
-
-```javascript
-import * as React from "react";
-import { useState, useEffect, useContext } from "react";
-
-const FlagsContext = React.createContext([]);
-
-function FlagsProvider({ children, projectId }) {
-  if (projectId === undefined) {
-    throw new Error("FlagsProvider expects project id");
-  }
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    fetch(`https://flags.stackonfire.dev/api/flags/${projectId}`)
-      .then((res) => res.json())
-      .then((data) => setData(data));
-  }, [projectId]);
-
-  return <FlagsContext.Provider value={data}>{children}</FlagsContext.Provider>;
-}
-
-function useFlags() {
-  const context = useContext(FlagsContext);
-  if (context === undefined) {
-    throw new Error("useFlags must be used within a FlagsProvider");
-  }
-  return context;
-}
-
-export { FlagsProvider, useFlags };
-
-```
-
-Somewhere on the top level of the your app you need to provide the id of the project which is present in the link you've copied:
-
-```javascript
- <FlagsProvider projectId="xxxxxxxxxxxxxxx">
-     <App/>
-  </FlagsProvider>
-
-```
-
-In your app component:
-
-```javascript
-import { useFlags } from "context/flags-context";
-
-const Component = () => {
-  const flags = useFlags();
-  const foundFlag = flags.find((flag) => flag.name === "test-flag-1");
-
-  return <div>{foundFlag.isActive ? <p>Hello there</p> : null}</div>;
-};
-```
+[Official fire-flags library for react](https://github.com/stack-on-fire/react-fire-flags) - engineered by [Alfredo Salzillo](https://github.com/alfredosalzillo)
 
 ## Get started with self-hosted version
 
