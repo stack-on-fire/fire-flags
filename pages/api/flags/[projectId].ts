@@ -23,6 +23,9 @@ const handle = async (req, res) => {
     where: {
       projectId: String(req.query.projectId),
     },
+    include: {
+      heats: true,
+    },
   });
 
   res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate");
