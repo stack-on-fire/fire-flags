@@ -1,4 +1,5 @@
 import React from "react";
+import NextNprogress from "nextjs-progressbar";
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -22,6 +23,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Hydrate state={pageProps.dehydratedState}>
             <Provider session={pageProps.session}>
               <Component {...pageProps} />
+              <NextNprogress
+                color="#FF8826"
+                startPosition={0.3}
+                stopDelayMs={200}
+                height={2}
+                showOnShallow={true}
+              />
               <div>
                 <Toaster />
               </div>
