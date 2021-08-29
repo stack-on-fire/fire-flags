@@ -2,6 +2,7 @@ version: "3.9"
 services:
   pg:
     image: postgres:13
+    container_name: pg
     restart: "always"
     environment:
       POSTGRES_USER: postgres
@@ -11,3 +12,27 @@ services:
       - "4224:5432"
     volumes:
       - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5      
+  fflags-dasbuild:
+    image: node:14
+    container_name: fflags-dasbuild
+    working_dir: /home/node/app
+    volumes:
+      - .:/home/node/app
+    environment:
+      DATABASE_URL: postgresql://postgres:secret@pg:5432/prisma
+      # NEXT_AUTH_SECRET: RANDOM_STRING
+      # NEXTAUTH_URL: http://localhost:3000/api/auth
+    ports:
+      - 3000:3000
+    command: >
+      sh -c "yarn prisma db push &&
+             yarn prisma generate &&
+             yarn run dev"
+    depends_on:
+      pg:
+        condition: service_healthy
