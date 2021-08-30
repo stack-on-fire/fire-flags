@@ -20,12 +20,6 @@ services:
     build: .
     environment:
       DATABASE_URL: postgresql://postgres:secret@pg:5432/prisma
-      # NEXT_AUTH_SECRET: RANDOM_STRING
-      # NEXTAUTH_URL: http://localhost:3000/api/auth
-    # command: >
-    #   sh -c "yarn prisma db push &&
-    #          yarn prisma generate &&
-    #          yarn run dev"
     ports:
       - 3000:3000
     depends_on:
