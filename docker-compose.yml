@@ -8,6 +8,20 @@ services:
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: prisma
     ports:
-      - "4224:5432"
+      - 4224:5432
     volumes:
       - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5      
+  fire-flags:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://postgres:secret@pg:5432/prisma
+    ports:
+      - 3000:3000
+    depends_on:
+      pg:
+        condition: service_healthy
