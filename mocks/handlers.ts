@@ -1,8 +1,9 @@
 import { rest } from "msw";
 
-const sessionMock = {
+export const sessionMock = {
   expires: "1",
   user: {
+    id: 1,
     email: "alpha@me.com",
     name: "Alpha",
     image: null,
