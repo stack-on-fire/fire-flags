@@ -100,9 +100,9 @@ model FeatureFlag {
 model Heat {
   id        String   @id @default(cuid())
   flagId    String?
-  type      HeatType @default(ENVIRONMENT)
-  strategy  Strategy @default(IN)
-  property  String   @default("users")
+  type      HeatType
+  strategy  Strategy
+  property  String
   values    String[]
   name      String?
   createdAt DateTime @default(now()) @map(name: "created_at")
