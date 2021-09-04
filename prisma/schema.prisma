@@ -101,8 +101,8 @@ model Heat {
   id        String   @id @default(cuid())
   flagId    String?
   type      HeatType @default(ENVIRONMENT)
-  strategy  Strategy
-  property  String
+  strategy  Strategy @default(IN)
+  property  String   @default("users")
   values    String[]
   name      String?
   createdAt DateTime @default(now()) @map(name: "created_at")
