@@ -34,6 +34,8 @@ import {
   SimpleGrid,
   TabList,
   useDisclosure,
+  Select,
+  VStack,
 } from "@chakra-ui/react";
 
 import { useFlagMutation } from "hooks";
@@ -50,6 +52,7 @@ import HeatRenderer from "./heat-renderer";
 import HeatsSelection from "./heats-selection";
 import { useState } from "react";
 import axios from "axios";
+import { Strategy } from "@prisma/client";
 
 const DetailsSection = ({
   selectedFlag,
@@ -67,8 +70,11 @@ const DetailsSection = ({
   const appUrl = useAppUrl();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedHeatOption, setSelectedHeatOption] = useState<
-    "ENVIRONMENT" | "USER_INCLUDE" | "USER_EXCLUDE"
+    "ENVIRONMENT" | "USER_INCLUDE" | "USER_EXCLUDE" | "CUSTOM"
   >();
+  const [customHeatStrategy, setCustomHeatStrategy] = useState<Strategy>("IN");
+  const [customHeatProperty, setCustomHeatProperty] = useState("");
+  const [customHeatName, setCustomHeatName] = useState("");
   const queryClient = useQueryClient();
   const flagMutation = useFlagMutation();
   const borderColor = useColorModeValue("gray.200", "gray.700");
@@ -81,6 +87,9 @@ const DetailsSection = ({
         `${appUrl}/api/heat/create?flagId=${selectedFlag.id}`,
         {
           type: selectedHeatOption,
+          property: customHeatProperty,
+          strategy: customHeatStrategy,
+          name: customHeatName,
         }
       );
 
@@ -349,6 +358,30 @@ const DetailsSection = ({
               selectedHeatOption={selectedHeatOption}
               setSelectedHeatOption={setSelectedHeatOption}
             />
+            {selectedHeatOption === "CUSTOM" && (
+              <VStack my={4}>
+                <Input
+                  placeholder="e.g Include users with roles"
+                  value={customHeatName}
+                  onChange={(e) => setCustomHeatName(e.target.value)}
+                />
+                <Input
+                  placeholder="e.g. user_role"
+                  value={customHeatProperty}
+                  onChange={(e) => setCustomHeatProperty(e.target.value)}
+                />
+                <Select
+                  onChange={(e) =>
+                    setCustomHeatStrategy(e.target.value as Strategy)
+                  }
+                  value={customHeatStrategy}
+                  placeholder="Select option"
+                >
+                  <option value="IN">IN</option>
+                  <option value="NOT_IN">NOT_IN</option>
+                </Select>
+              </VStack>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" onClick={onClose}>
@@ -356,6 +389,9 @@ const DetailsSection = ({
             </Button>
             <Button
               mr={3}
+              isDisabled={
+                selectedHeatOption === "CUSTOM" && !customHeatStrategy
+              }
               onClick={async () => {
                 createHeatMutation.mutate();
                 onClose();
