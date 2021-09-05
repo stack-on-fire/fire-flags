@@ -1,4 +1,6 @@
+import { Prisma } from "@prisma/client";
 import prisma from "lib/prisma";
+
 import { generateSlug } from "random-word-slugs";
 
 export default async function handle(req, res) {
@@ -20,6 +22,14 @@ export default async function handle(req, res) {
           id: projectId,
         },
       },
+    },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      flagId: featureFlag.id,
+      type: "FLAG_CREATE",
+      after: featureFlag as unknown as Prisma.JsonObject,
     },
   });
 

@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import prisma from "lib/prisma";
 
 export default async function handle(req, res) {
@@ -23,6 +24,15 @@ export default async function handle(req, res) {
       isArchived: toggleArchive
         ? !currentFeatureFlag.isArchived
         : currentFeatureFlag.isArchived,
+    },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      flagId: featureFlag.id,
+      type: "FLAG_UPDATE",
+      before: currentFeatureFlag as unknown as Prisma.JsonObject,
+      after: featureFlag as unknown as Prisma.JsonObject,
     },
   });
 

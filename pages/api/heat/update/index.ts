@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import prisma from "lib/prisma";
 import { uniq } from "lodash";
 
@@ -13,16 +14,22 @@ export default async function handle(req, res) {
     },
   });
 
-  const valuesFromPayload = values ?? [];
+  const flagBefore = await prisma.featureFlag.findUnique({
+    where: {
+      id: currentHeat.flagId,
+    },
+  });
 
-  console.log("values from payload", valuesFromPayload);
+  console.log(flagBefore);
+
+  const valuesFromPayload = values ?? [];
 
   const valuesToAdd =
     deleteValues || ["ENVIRONMENT"].includes(currentHeat.type)
       ? values
       : uniq([...valuesFromPayload, ...currentHeat.values]);
 
-  const featureFlag = await prisma.heat.update({
+  const updatedheat = await prisma.heat.update({
     where: {
       id,
     },
@@ -31,5 +38,20 @@ export default async function handle(req, res) {
     },
   });
 
-  res.json(featureFlag);
+  const flagAfter = await prisma.featureFlag.findUnique({
+    where: {
+      id: currentHeat.flagId,
+    },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      flagId: currentHeat.flagId,
+      type: "HEAT_UPDATE",
+      before: flagBefore as unknown as Prisma.JsonObject,
+      after: flagAfter as unknown as Prisma.JsonObject,
+    },
+  });
+
+  res.json(updatedheat);
 }
