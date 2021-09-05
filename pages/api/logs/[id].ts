@@ -7,6 +7,9 @@ export default async function handle(req, res) {
     where: {
       flagId: id,
     },
+    include: {
+      User: true,
+    },
     orderBy: {
       createdAt: "desc",
     },

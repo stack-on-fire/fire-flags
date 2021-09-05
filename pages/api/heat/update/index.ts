@@ -1,9 +1,15 @@
+import { getSession } from "next-auth/client";
 import { Prisma } from "@prisma/client";
 import prisma from "lib/prisma";
 import { uniq } from "lodash";
+import { sessionMock } from "mocks/handlers";
 
 export default async function handle(req, res) {
   const { id } = req.query;
+  const session =
+    (await getSession({ req })) ||
+    (process.env.NODE_ENV === "development" && sessionMock);
+
   const {
     payload: { values, deleteValues },
   } = req.body;
@@ -47,6 +53,7 @@ export default async function handle(req, res) {
   await prisma.auditLog.create({
     data: {
       flagId: currentHeat.flagId,
+      userId: session.user.id,
       type: "HEAT_UPDATE",
       before: flagBefore as unknown as Prisma.JsonObject,
       after: flagAfter as unknown as Prisma.JsonObject,

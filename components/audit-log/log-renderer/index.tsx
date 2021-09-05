@@ -6,7 +6,7 @@ import {
   useColorModeValue,
   Heading,
 } from "@chakra-ui/react";
-import { AuditLog, FeatureFlag } from "@prisma/client";
+import { AuditLog, FeatureFlag, User } from "@prisma/client";
 import React from "react";
 import { format } from "date-fns";
 
@@ -18,7 +18,11 @@ const typeToTitle = {
   HEAT_DELETE: "Deleted heat for flag",
 };
 
-const LogRenderer = ({ log }: { log: AuditLog & { after: FeatureFlag } }) => {
+const LogRenderer = ({
+  log,
+}: {
+  log: AuditLog & { after: FeatureFlag; before: FeatureFlag; User: User };
+}) => {
   return (
     <Stack as="li" direction="row" spacing="4">
       <Flex direction="column" alignItems="center" aria-hidden="true">
@@ -42,6 +46,9 @@ const LogRenderer = ({ log }: { log: AuditLog & { after: FeatureFlag } }) => {
           <Heading fontSize="md" fontWeight="semibold">
             {typeToTitle[log.type]}
           </Heading>
+          <Text fontSize="sm" color={useColorModeValue("gray.500", "gray.300")}>
+            {log.User.name}
+          </Text>
           <Text fontSize="sm" color={useColorModeValue("gray.600", "gray.400")}>
             {format(new Date(log.createdAt), "PP p")}
           </Text>

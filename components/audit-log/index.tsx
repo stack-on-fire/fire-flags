@@ -1,5 +1,5 @@
 import { Heading } from "@chakra-ui/react";
-import { AuditLog, FeatureFlag } from "@prisma/client";
+import { AuditLog, FeatureFlag, User } from "@prisma/client";
 import { useLogs } from "hooks/useLogs";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -10,7 +10,9 @@ const AuditLogComponent = () => {
   const {
     data: logs,
   }: {
-    data: ReadonlyArray<AuditLog & { before: FeatureFlag; after: FeatureFlag }>;
+    data: ReadonlyArray<
+      AuditLog & { before: FeatureFlag; after: FeatureFlag; User: User }
+    >;
   } = useLogs({ id: router.query.flag });
 
   return (

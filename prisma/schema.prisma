@@ -51,6 +51,7 @@ model User {
   updatedAt     DateTime  @default(now()) @map(name: "updated_at")
 
   projects Project[]
+  AuditLog AuditLog[]
 
   @@map(name: "users")
 }
@@ -114,15 +115,17 @@ model Heat {
 }
 
 model AuditLog {
-  id     String  @id @default(cuid())
-  flagId String?
+  id     String @id @default(cuid())
+  userId Int
+  flagId String
   type   String
   before Json?
   after  Json
 
-  FeatureFlag FeatureFlag? @relation(fields: [flagId], references: [id])
-  createdAt   DateTime     @default(now()) @map(name: "created_at")
-  updatedAt   DateTime     @updatedAt @map(name: "updated_at")
+  FeatureFlag FeatureFlag @relation(fields: [flagId], references: [id])
+  User        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now()) @map(name: "created_at")
+  updatedAt   DateTime    @updatedAt @map(name: "updated_at")
 }
 
 enum HeatType {
