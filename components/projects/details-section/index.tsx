@@ -81,14 +81,44 @@ const DetailsSection = ({
   const textColor = useColorModeValue("gray.600", "gray.300");
   const descriptionTextColor = useColorModeValue("gray.400", "gray.500");
 
-  const createHeatMutation = useMutation(
-    async () => {
-      const result = await axios.post(
-        `${appUrl}/api/heat/create?flagId=${selectedFlag.id}`,
-        {
+  const heatParamsFactory = () => {
+    switch (selectedHeatOption) {
+      case "ENVIRONMENT":
+        return {
+          type: selectedHeatOption,
+          property: "environment",
+          strategy: "IN",
+        };
+      case "USER_INCLUDE":
+        return {
+          type: selectedHeatOption,
+          property: "user",
+          strategy: "IN",
+        };
+      case "USER_EXCLUDE":
+        return {
+          type: selectedHeatOption,
+          property: "user",
+          strategy: "NOT_IN",
+        };
+      case "CUSTOM":
+        return {
           type: selectedHeatOption,
           property: customHeatProperty,
           strategy: customHeatStrategy,
+        };
+      default:
+        break;
+    }
+  };
+
+  const createHeatMutation = useMutation(
+    async () => {
+      const params = heatParamsFactory();
+      const result = await axios.post(
+        `${appUrl}/api/heat/create?flagId=${selectedFlag.id}`,
+        {
+          ...params,
           name: customHeatName,
         }
       );

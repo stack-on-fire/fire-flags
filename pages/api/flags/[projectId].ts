@@ -25,19 +25,20 @@ function isHeatApplicable(customHeat: Heat, config: Map<string, string>) {
     switch (customHeat.strategy) {
       case "IN":
         return customHeat.values.includes(value);
-    }
-    switch (customHeat.strategy) {
       case "NOT_IN":
         return !customHeat.values.includes(value);
+      default:
+        return false;
     }
   }
-  return false;
 }
 
 const handle = async (req, res) => {
+  const { projectId, ...config } = req.query;
+
   const flags = await prisma.featureFlag.findMany({
     where: {
-      projectId: String(req.query.projectId),
+      projectId: String(projectId),
     },
     include: {
       heats: true,
@@ -49,7 +50,7 @@ const handle = async (req, res) => {
     .status(200)
     .json(
       flags.filter((flag) =>
-        flag.heats.every((heat) => isHeatApplicable(heat, req.query.config))
+        flag.heats.every((heat) => isHeatApplicable(heat, config))
       )
     );
 };
