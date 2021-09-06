@@ -86,7 +86,7 @@ model Project {
 
 model FeatureFlag {
   id          String   @id @default(cuid())
-  projectId   String?
+  projectId   String
   name        String
   description String?
   isActive    Boolean  @default(false)
@@ -95,13 +95,13 @@ model FeatureFlag {
   updatedAt   DateTime @updatedAt @map(name: "updated_at")
   heats       Heat[]
 
-  Project  Project?   @relation(fields: [projectId], references: [id])
+  Project  Project    @relation(fields: [projectId], references: [id])
   AuditLog AuditLog[]
 }
 
 model Heat {
   id        String   @id @default(cuid())
-  flagId    String?
+  flagId    String
   type      HeatType
   strategy  Strategy
   property  String
@@ -111,7 +111,7 @@ model Heat {
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
 
-  FeatureFlag FeatureFlag? @relation(fields: [flagId], references: [id])
+  FeatureFlag FeatureFlag @relation(fields: [flagId], references: [id])
 }
 
 model AuditLog {
