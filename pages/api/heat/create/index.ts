@@ -11,7 +11,7 @@ export default async function handle(req, res) {
     (process.env.NODE_ENV === "development" && sessionMock);
 
   if (!type) {
-    return res.status(500);
+    return res.status(422);
   }
 
   const flagBefore = await prisma.featureFlag.findUnique({
