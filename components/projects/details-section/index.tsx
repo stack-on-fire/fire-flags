@@ -53,6 +53,7 @@ import HeatsSelection from "./heats-selection";
 import { useState } from "react";
 import axios from "axios";
 import { Strategy } from "@prisma/client";
+import AuditLog from "components/audit-log";
 
 const DetailsSection = ({
   selectedFlag,
@@ -173,6 +174,7 @@ const DetailsSection = ({
               <TabList mb="1em">
                 <Tab>Main</Tab>
                 <Tab>Heats</Tab>
+                <Tab>History</Tab>
                 <Tab>Settings</Tab>
               </TabList>
               <TabPanels>
@@ -273,6 +275,9 @@ const DetailsSection = ({
                       </Box>
                     );
                   })}
+                </TabPanel>
+                <TabPanel>
+                  <AuditLog />
                 </TabPanel>
                 <TabPanel>
                   <HStack mb={2}>

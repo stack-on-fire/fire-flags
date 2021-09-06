@@ -20,6 +20,7 @@
     "@svgr/webpack": "^5.5.0",
     "axios": "^0.21.1",
     "boring-avatars": "^1.5.8",
+    "date-fns": "^2.23.0",
     "framer-motion": "^4",
     "fuse.js": "^6.4.6",
     "lodash": "^4.17.21",

@@ -20,6 +20,7 @@ import {
   InputGroup,
   FormLabel,
   Input,
+  Skeleton,
 } from "@chakra-ui/react";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import ProjectCard from "components/project-card";
@@ -41,8 +42,10 @@ const Index = () => {
 
   const {
     data: projects,
+    isLoading,
   }: {
     data: ReadonlyArray<Project & { featureFlags: ReadonlyArray<FeatureFlag> }>;
+    isLoading: boolean;
   } = useProjects();
 
   const createProjectMutation = useMutation(
@@ -83,9 +86,17 @@ const Index = () => {
           </Button>
         </Flex>
         <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
-          {projects?.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+          {isLoading ? (
+            <>
+              <Skeleton width="280px" height="150px" />
+              <Skeleton width="280px" height="150px" />
+              <Skeleton width="280px" height="150px" />
+            </>
+          ) : (
+            projects?.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))
+          )}
         </SimpleGrid>
       </Box>
       <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>

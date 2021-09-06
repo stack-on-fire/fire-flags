@@ -2,18 +2,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.project.upsert({
-    where: { id: "cks04kp0d000008lb9aqw23gg" },
+  await prisma.user.upsert({
+    where: { id: 1 },
     update: {},
     create: {
-      name: "Test project one",
-      userId: "1",
-      featureFlags: {
-        create: {
-          name: "Test flag 1",
-          description: "Test flag 1 description",
-        },
-      },
+      name: "alpha@me.com",
     },
   });
 }
