@@ -34,6 +34,8 @@ import {
   SimpleGrid,
   TabList,
   useDisclosure,
+  Select,
+  VStack,
 } from "@chakra-ui/react";
 
 import { useFlagMutation } from "hooks";
@@ -50,6 +52,7 @@ import HeatRenderer from "./heat-renderer";
 import HeatsSelection from "./heats-selection";
 import { useState } from "react";
 import axios from "axios";
+import { Strategy } from "@prisma/client";
 
 const DetailsSection = ({
   selectedFlag,
@@ -67,20 +70,56 @@ const DetailsSection = ({
   const appUrl = useAppUrl();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedHeatOption, setSelectedHeatOption] = useState<
-    "ENVIRONMENT" | "USER_INCLUDE" | "USER_EXCLUDE"
+    "ENVIRONMENT" | "USER_INCLUDE" | "USER_EXCLUDE" | "CUSTOM"
   >();
+  const [customHeatStrategy, setCustomHeatStrategy] = useState<Strategy>("IN");
+  const [customHeatProperty, setCustomHeatProperty] = useState("");
+  const [customHeatName, setCustomHeatName] = useState("");
   const queryClient = useQueryClient();
   const flagMutation = useFlagMutation();
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const textColor = useColorModeValue("gray.600", "gray.300");
   const descriptionTextColor = useColorModeValue("gray.400", "gray.500");
 
+  const heatParamsFactory = () => {
+    switch (selectedHeatOption) {
+      case "ENVIRONMENT":
+        return {
+          type: selectedHeatOption,
+          property: "environment",
+          strategy: "IN",
+        };
+      case "USER_INCLUDE":
+        return {
+          type: selectedHeatOption,
+          property: "user",
+          strategy: "IN",
+        };
+      case "USER_EXCLUDE":
+        return {
+          type: selectedHeatOption,
+          property: "user",
+          strategy: "NOT_IN",
+        };
+      case "CUSTOM":
+        return {
+          type: selectedHeatOption,
+          property: customHeatProperty,
+          strategy: customHeatStrategy,
+        };
+      default:
+        break;
+    }
+  };
+
   const createHeatMutation = useMutation(
     async () => {
+      const params = heatParamsFactory();
       const result = await axios.post(
         `${appUrl}/api/heat/create?flagId=${selectedFlag.id}`,
         {
-          type: selectedHeatOption,
+          ...params,
+          name: customHeatName,
         }
       );
 
@@ -349,6 +388,30 @@ const DetailsSection = ({
               selectedHeatOption={selectedHeatOption}
               setSelectedHeatOption={setSelectedHeatOption}
             />
+            {selectedHeatOption === "CUSTOM" && (
+              <VStack my={4}>
+                <Input
+                  placeholder="e.g Include users with roles"
+                  value={customHeatName}
+                  onChange={(e) => setCustomHeatName(e.target.value)}
+                />
+                <Input
+                  placeholder="e.g. user_role"
+                  value={customHeatProperty}
+                  onChange={(e) => setCustomHeatProperty(e.target.value)}
+                />
+                <Select
+                  onChange={(e) =>
+                    setCustomHeatStrategy(e.target.value as Strategy)
+                  }
+                  value={customHeatStrategy}
+                  placeholder="Select option"
+                >
+                  <option value="IN">IN</option>
+                  <option value="NOT_IN">NOT_IN</option>
+                </Select>
+              </VStack>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button variant="ghost" onClick={onClose}>
@@ -356,6 +419,9 @@ const DetailsSection = ({
             </Button>
             <Button
               mr={3}
+              isDisabled={
+                selectedHeatOption === "CUSTOM" && !customHeatStrategy
+              }
               onClick={async () => {
                 createHeatMutation.mutate();
                 onClose();

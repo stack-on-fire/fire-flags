@@ -38,6 +38,7 @@ const HeatsSelection = ({
           >
             Exclude users with ids
           </Radio>
+          <Radio value="CUSTOM">Custom heat</Radio>
         </VStack>
       </RadioGroup>
     </Box>

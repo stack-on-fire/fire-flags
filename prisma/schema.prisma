@@ -98,13 +98,15 @@ model FeatureFlag {
 }
 
 model Heat {
-  id           String   @id @default(cuid())
-  flagId       String?
-  type         HeatType @default(ENVIRONMENT)
-  environments String[]
-  users        String[]
-  createdAt    DateTime @default(now()) @map(name: "created_at")
-  updatedAt    DateTime @updatedAt @map(name: "updated_at")
+  id        String   @id @default(cuid())
+  flagId    String?
+  type      HeatType
+  strategy  Strategy
+  property  String
+  values    String[]
+  name      String?
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
 
   FeatureFlag FeatureFlag? @relation(fields: [flagId], references: [id])
@@ -114,4 +116,10 @@ enum HeatType {
   ENVIRONMENT
   USER_INCLUDE
   USER_EXCLUDE
+  CUSTOM
+}
+
+enum Strategy {
+  IN
+  NOT_IN
 }

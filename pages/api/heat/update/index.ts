@@ -4,7 +4,7 @@ import { uniq } from "lodash";
 export default async function handle(req, res) {
   const { id } = req.query;
   const {
-    payload: { deleteUserIds, ...rest },
+    payload: { values, deleteValues },
   } = req.body;
 
   const currentHeat = await prisma.heat.findUnique({
@@ -13,19 +13,21 @@ export default async function handle(req, res) {
     },
   });
 
-  const usersFromPayload = rest.users ?? [];
+  const valuesFromPayload = values ?? [];
 
-  const userIdsToAdd = deleteUserIds
-    ? rest.users
-    : uniq([...usersFromPayload, ...currentHeat.users]);
+  console.log("values from payload", valuesFromPayload);
+
+  const valuesToAdd =
+    deleteValues || ["ENVIRONMENT"].includes(currentHeat.type)
+      ? values
+      : uniq([...valuesFromPayload, ...currentHeat.values]);
 
   const featureFlag = await prisma.heat.update({
     where: {
       id,
     },
     data: {
-      ...rest,
-      users: userIdsToAdd,
+      values: valuesToAdd,
     },
   });
 

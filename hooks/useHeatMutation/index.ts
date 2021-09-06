@@ -3,12 +3,10 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { Heat } from "@prisma/client";
 
-type Environments = "development" | "staging" | "production";
 type Variables = {
   id: Heat["id"];
-  environments?: Environments[];
-  users?: string[];
-  deleteUserIds?: boolean;
+  values: string[];
+  deleteValues?: boolean;
 };
 
 const useHeatMutation = () => {
@@ -20,9 +18,8 @@ const useHeatMutation = () => {
         `${appUrl}/api/heat/update?id=${variables.id}`,
         {
           payload: {
-            environments: variables.environments,
-            users: variables.users,
-            deleteUserIds: variables.deleteUserIds,
+            values: variables.values,
+            deleteValues: variables.deleteValues,
           },
         }
       );
