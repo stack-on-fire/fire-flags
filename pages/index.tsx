@@ -88,7 +88,6 @@ const Index = () => {
         <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
           {isLoading ? (
             <>
-              {" "}
               <Skeleton width="280px" height="150px" />
               <Skeleton width="280px" height="150px" />
               <Skeleton width="280px" height="150px" />
