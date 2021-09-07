@@ -1,4 +1,4 @@
-![fireflags-banner](https://user-images.githubusercontent.com/29632358/132315507-f85b63b9-9dfc-4a37-a114-9ddcc668b32d.png)
+![fireflags-banner](https://user-images.githubusercontent.com/29632358/132315785-1daa0f46-92d9-45da-963d-d991dc705d5f.png)
 
 Suggest new features here
 
