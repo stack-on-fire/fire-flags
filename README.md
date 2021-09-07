@@ -1,4 +1,4 @@
-# Fire flags 🔥
+![fireflags-banner](https://user-images.githubusercontent.com/29632358/132315507-f85b63b9-9dfc-4a37-a114-9ddcc668b32d.png)
 
 Suggest new features here
 
