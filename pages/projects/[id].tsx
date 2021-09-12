@@ -19,6 +19,7 @@ import {
   Heading,
   Text,
   Skeleton,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { QueryClient } from "react-query";
 import {
@@ -37,11 +38,14 @@ import FireFeature from "components/fire-feature";
 import Breadcrumbs from "components/projects";
 import ProjectSection from "components/projects/project-section";
 import DetailsSection from "components/projects/details-section";
+import { truncate } from "lodash";
 
 const Project = () => {
   const router = useRouter();
   const flagMutation = useFlagMutation();
   const projectMutation = useProjectMutation();
+  const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
+
   const appUrl = useAppUrl();
 
   const {
@@ -119,7 +123,9 @@ const Project = () => {
         )}
         <FireFeature flagName="project link">
           <Box>
-            <Code mt={4}>{accessUrl}</Code>
+            <Code mt={4}>
+              {truncate(accessUrl, { length: isSmallerThan600px ? 25 : 100 })}
+            </Code>
             <Button size="xs" onClick={onCopy} ml={2}>
               {hasCopied ? "Copied" : "Copy"}
             </Button>

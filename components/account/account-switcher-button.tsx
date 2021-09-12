@@ -1,4 +1,11 @@
-import { Box, Flex, FlexProps, HStack, useMenuButton } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  FlexProps,
+  HStack,
+  useMediaQuery,
+  useMenuButton,
+} from "@chakra-ui/react";
 import * as React from "react";
 import Avatar from "boring-avatars";
 import { HiSelector } from "react-icons/hi";
@@ -6,6 +13,7 @@ import { User } from "@prisma/client";
 
 export const AccountSwitcherButton = (props: FlexProps & { user: User }) => {
   const buttonProps = useMenuButton(props);
+  const [isSmallerThan600px] = useMediaQuery("(max-width: 600px)");
 
   return (
     <Flex
@@ -31,11 +39,13 @@ export const AccountSwitcherButton = (props: FlexProps & { user: User }) => {
           variant="ring"
           colors={["#B31237", "#F03813", "#FF8826", "#FFB914", "#2C9FA3"]}
         />
-        <Box textAlign="start">
-          <Box isTruncated fontWeight="semibold">
-            {props.user.email || props.user.name}
+        {!isSmallerThan600px && (
+          <Box textAlign="start">
+            <Box isTruncated fontWeight="semibold">
+              {props.user.email || props.user.name}
+            </Box>
           </Box>
-        </Box>
+        )}
         <Box fontSize="lg" color="gray.400">
           <HiSelector />
         </Box>
