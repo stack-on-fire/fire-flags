@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev | pino-pretty --config pino.json",
     "lint": "next lint",
     "build": "next build",
-    "start": "next start",
+    "start": "next start | pino-pretty --config pino.json",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "prisma:generate": "prisma generate",
     "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\""
@@ -29,6 +29,8 @@
     "next-auth": "^3.23.3",
     "next-images": "^1.7.0",
     "nextjs-progressbar": "^0.0.11",
+    "pino": "6.13.2",
+    "pino-pretty": "6.13.2",
     "random-word-slugs": "^0.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
