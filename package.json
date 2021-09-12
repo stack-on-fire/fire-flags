@@ -30,7 +30,7 @@
     "next-images": "^1.7.0",
     "nextjs-progressbar": "^0.0.11",
     "pino": "6.13.2",
-    "pino-pretty": "6.13.2",
+    "pino-pretty": "6.0.0",
     "random-word-slugs": "^0.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
