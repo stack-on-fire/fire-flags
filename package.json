@@ -6,7 +6,7 @@
     "dev": "next dev | pino-pretty --config pino.json",
     "lint": "next lint",
     "build": "next build",
-    "start": "next start | pino-pretty --config pino.json",
+    "start": "next start",
     "vercel-build": "prisma generate && prisma migrate deploy && next build",
     "prisma:generate": "prisma generate",
     "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\""
