@@ -21,6 +21,12 @@ import {
   FormLabel,
   Input,
   Skeleton,
+  Center,
+  OrderedList,
+  ListItem,
+  Link,
+  Heading,
+  VStack,
 } from "@chakra-ui/react";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import ProjectCard from "components/project-card";
@@ -85,19 +91,39 @@ const Index = () => {
             New Project
           </Button>
         </Flex>
-        <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
-          {isLoading ? (
-            <>
-              <Skeleton width="280px" height="150px" />
-              <Skeleton width="280px" height="150px" />
-              <Skeleton width="280px" height="150px" />
-            </>
-          ) : (
-            projects?.map((project) => (
+        {isLoading ? (
+          <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
+            <Skeleton width="280px" height="150px" />
+            <Skeleton width="280px" height="150px" />
+            <Skeleton width="280px" height="150px" />
+          </SimpleGrid>
+        ) : projects.length > 0 ? (
+          <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
+            {projects?.map((project) => (
               <ProjectCard key={project.id} project={project} />
-            ))
-          )}
-        </SimpleGrid>
+            ))}
+          </SimpleGrid>
+        ) : (
+          <Center my={4}>
+            <VStack>
+              <Heading size="lg">Quick start guide</Heading>
+              <OrderedList>
+                <ListItem>Create new project</ListItem>
+                <ListItem>Create a feature flag</ListItem>
+                <ListItem>Create some heats (Optional)</ListItem>
+                <ListItem>
+                  <Link
+                    color="orange.300"
+                    href="https://github.com/stack-on-fire/react-fire-flags"
+                  >
+                    Use in React
+                  </Link>{" "}
+                  or make a call to API.
+                </ListItem>
+              </OrderedList>
+            </VStack>
+          </Center>
+        )}
       </Box>
       <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
