@@ -10,6 +10,9 @@ Dead simple and blazing fast feature-flags platform. Get started in minutes. Be 
 
 ![App example](img/app-demo.png?raw=true "App example")
 
+https://user-images.githubusercontent.com/29632358/133240482-2bdb08be-b41a-406c-9e1c-df6064e0d2cd.mp4
+
+
 ## Get started with managed version
 
 - Visit [flags.stackonfire.dev](https://flags.stackonfire.dev) and sign in with any convenient method.
