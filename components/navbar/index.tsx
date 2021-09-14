@@ -36,7 +36,7 @@ export const Navbar = () => {
             cursor="pointer"
           >
             <VisuallyHidden>Stack on fire</VisuallyHidden>
-            <Logo h="6" />
+            <Logo />
           </Box>
 
           <Skeleton height="20px" />
