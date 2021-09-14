@@ -115,7 +115,7 @@ export const MobileNav = () => {
           >
             <Box pt="5" pb="6" px="5">
               <Flex justify="space-between" align="center">
-                <Logo h="6" />
+                <Logo />
                 <Box mr="-2" mt="-2">
                   <Center
                     as="button"
