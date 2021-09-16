@@ -52,7 +52,7 @@ const Index = () => {
   }: {
     data: ReadonlyArray<Project & { featureFlags: ReadonlyArray<FeatureFlag> }>;
     isLoading: boolean;
-  } = useProjects();
+  } = useProjects({ skip: !!session });
 
   const createProjectMutation = useMutation(
     ({ projectName }: { projectName: string }) =>
@@ -64,40 +64,44 @@ const Index = () => {
     }
   );
 
+  console.log(session);
+
   return (
     <Box>
       <Navbar />
 
       <Box maxW={1200} mx="auto">
-        <Flex
-          align="center"
-          justify={["center", "center", "left"]}
-          borderBottom="1px solid"
-          borderColor="gray.600"
-          height="80px"
-          p={[0, 0, 4]}
-          transition="all 0.3s"
-        >
-          <Button
-            onClick={() => {
-              if (session) {
-                onOpen();
-              } else {
-                router.push("/signin", null, { shallow: true });
-              }
-            }}
-            leftIcon={<PlusSquareIcon />}
+        {session && (
+          <Flex
+            align="center"
+            justify={["center", "center", "left"]}
+            borderBottom="1px solid"
+            borderColor="gray.600"
+            height="80px"
+            p={[0, 0, 4]}
+            transition="all 0.3s"
           >
-            New Project
-          </Button>
-        </Flex>
-        {isLoading ? (
+            <Button
+              onClick={() => {
+                if (session) {
+                  onOpen();
+                } else {
+                  router.push("/signin", null, { shallow: true });
+                }
+              }}
+              leftIcon={<PlusSquareIcon />}
+            >
+              New Project
+            </Button>
+          </Flex>
+        )}
+        {session?.user && isLoading ? (
           <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
             <Skeleton width="280px" height="150px" />
             <Skeleton width="280px" height="150px" />
             <Skeleton width="280px" height="150px" />
           </SimpleGrid>
-        ) : projects.length > 0 ? (
+        ) : projects?.length > 0 ? (
           <SimpleGrid p={4} columns={[1, 2, 3, 4]} spacing={4} gridGap={2}>
             {projects?.map((project) => (
               <ProjectCard key={project.id} project={project} />

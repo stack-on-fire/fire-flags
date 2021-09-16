@@ -9,9 +9,9 @@ const fetchProjects = async (appUrl) => {
   return json;
 };
 
-const useProjects = () => {
+const useProjects = ({ skip }: { skip: boolean }) => {
   const appUrl = useAppUrl();
-  return useQuery(["projects"], () => fetchProjects(appUrl));
+  return useQuery(["projects"], () => fetchProjects(appUrl), { enabled: skip });
 };
 
 export { useProjects, fetchProjects };
