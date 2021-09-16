@@ -12,7 +12,6 @@ import { FlagsProvider } from "context/flags-context";
 if (process.env.NODE_ENV === "development") {
   require("mocks");
 }
-console.log(process.env);
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
